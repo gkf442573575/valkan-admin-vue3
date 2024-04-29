@@ -1,0 +1,93 @@
+// 无滑动条
+.no-scrollbar {
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
+}
+
+.pretty-bar {
+  // 滚动条整体
+  &::-webkit-scrollbar {
+    z-index: 50;
+    width: 10px;
+    height: 3px;
+    background: #b8b8b8;
+  }
+  // 滚动条滑道
+  &::-webkit-scrollbar-track {
+    background-color: #b8b8b8;
+  }
+  // 滚动滑块样式
+  &::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #b6b6b6;
+    transition: all 0.2s;
+    height: 10px;
+    border: 1px solid #b6b6b6;
+  }
+  // 滚动条的样式，是可以跟 :hover 伪类叠加使用的
+  // 滚动条鼠标悬浮时的样式
+  &:hover::-webkit-scrollbar-thumb {
+    transition: all 0.2s;
+  }
+  // 滚动条上下的箭头按钮
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+}
+
+// 单行超出 省略号
+.overflow-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行超出省略号，直接 在less 中 .overflow-text-lines(2)
+.overflow-text-lines(@line) {
+  word-break: break-all;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: @line;
+  -webkit-box-orient: vertical;
+}
+
+// 宽度100% 高度100%
+.w_10_h_10 {
+  width: 100%;
+  height: 100%;
+}
+// 宽度100% 高度50%
+.w_10_h_5 {
+  width: 100%;
+  height: 50%;
+}
+// 宽度50% 高度100%
+.w_5_h_10 {
+  width: 50%;
+  height: 100%;
+}
+// flex居中
+.flex_align_center {
+  display: flex;
+  align-items: center;
+}
+// flex居中
+.flex_justify_center {
+  display: flex;
+  justify-content: center;
+}
+// 居中
+.postiopn_center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
