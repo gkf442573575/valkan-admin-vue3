@@ -10,8 +10,8 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 // icon-park
 import '@icon-park/vue-next/styles/index.css'
 
-import './styles/main.less'
-import './styles/mixins.less'
+import './styles/main.scss'
+import './styles/mixins.scss'
 
 import App from './App.vue'
 import router from './router'

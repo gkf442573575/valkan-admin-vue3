@@ -117,4 +117,4 @@ defineOptions({
 })
 </script>
 
-<style lang="less" src="./styles/index.less"></style>
+<style lang="scss" src="./index.scss"></style>

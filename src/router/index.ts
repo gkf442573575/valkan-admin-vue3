@@ -50,6 +50,14 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   const token = authStore.getToken()
   if (token) {
+    if (to.name === 'Login') {
+      next({
+        path: '/',
+        replace: true
+      })
+      return
+    }
+    // 获取用户信息
     await authStore.getUserInfo()
     next()
   } else {

@@ -1,5 +1,5 @@
 <template>
-  <div class="vk-layout">
+  <div class="vk-layout w_10_h_10">
     <LayoutHeader />
     <RouterView />
   </div>
@@ -12,3 +12,5 @@ defineOptions({
   name: 'vk-layout'
 })
 </script>
+
+<style lang="scss" src="./index.scss"></style>

@@ -1,3 +1,12 @@
+// 多行超出省略号，.overflow-text-lines(2)
+@mixin overflow-text-lines($line: 2) {
+  word-break: break-all;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
 // 无滑动条
 .no-scrollbar {
   scrollbar-width: none; /* firefox */
@@ -48,15 +57,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-// 多行超出省略号，直接 在less 中 .overflow-text-lines(2)
-.overflow-text-lines(@line) {
-  word-break: break-all;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: @line;
-  -webkit-box-orient: vertical;
 }
 
 // 宽度100% 高度100%

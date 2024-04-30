@@ -1,0 +1,47 @@
+/* header的高度 */
+$layout-header-h: 65;
+
+/* 默认侧边栏宽度 */
+$aside-default-w: 201;
+
+/* 折叠侧边栏宽度 */
+$aside-default-w_collapse: 65;
+
+/* 二级主题主侧边栏宽度 */
+$aside-main-w: 81;
+
+/* 二级主题子侧边栏宽度 */
+$aside-sub-w: 181;
+
+.vk-layout {
+  overflow: hidden;
+}
+
+.vk-layout-header {
+  height: $layout-header-h * 1px;
+  background-color: var(--el-bg-color);
+  padding: 0 15px;
+  .vk-app-title {
+    color: var(--el-color-primary);
+  }
+  .vk-layout-menus {
+    flex: 1;
+  }
+  & &_icons {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 50%;
+    line-height: 40px;
+    margin-left: 5px;
+    &:hover {
+      background-color: var(--el-color-info-light-7);
+    }
+    .i-icon {
+      color: var(--el-text-color-regular);
+      font-size: 20px;
+      height: 40px;
+    }
+  }
+}
