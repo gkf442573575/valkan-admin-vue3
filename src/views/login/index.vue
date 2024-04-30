@@ -51,7 +51,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import type { LoginForm } from '@/types/index'
 
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 
 const appTitle = import.meta.env.VITE_APP_TITLE
@@ -68,7 +68,18 @@ const loginRules = reactive<FormRules<LoginForm>>({
 
 const isLoading = ref(false)
 
-const login = async () => {}
+const login = () => {
+  if (!loginFormRef.value) {
+    return
+  }
+  loginFormRef.value.validate(async (valid) => {
+    if (valid) {
+      //
+    } else {
+      return false
+    }
+  })
+}
 
 defineOptions({
   name: 'vk-login'

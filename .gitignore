@@ -38,3 +38,5 @@ pnpm-lock.yaml
 *.tar.gz
 *.rar
 *.7z
+
+vite.config.ts.timestamp-*

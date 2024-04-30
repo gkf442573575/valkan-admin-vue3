@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
             vueVendor: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
             iconPark: ['@icon-park/vue-next'],
             elementPlus: ['element-plus', '@element-plus/icons-vue'],
-            vendor: ['qs', 'dayjs', 'lodash', 'class-validator', 'crypto-js']
+            vendor: ['qs', 'dayjs', 'lodash', 'class-validator', 'crypto-js', 'js-cookie']
           }
         }
       }

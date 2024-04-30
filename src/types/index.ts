@@ -1,5 +1,5 @@
 /**
- * @desc 表格列
+ * @instance 表格列
  */
 export interface TableColItem {
   type?: 'select' | 'index' // 是否选择列 或者 index
@@ -17,9 +17,18 @@ export interface TableColItem {
 }
 
 /**
- * @desc 登录表单
+ * @instance 登录表单
  */
 export interface LoginForm {
   username: string
   password: string
+}
+
+/**
+ * @instance 用户信息
+ */
+export interface UserInfo {
+  id: string
+  username: string
+  [key: string]: string
 }
