@@ -10,10 +10,10 @@
       <div class="vk-login-box">
         <div class="vk-login-box__title">Login</div>
         <el-form ref="loginFormRef" class="vk-login-form" :model="loginForm" :rules="loginRules">
-          <el-form-item>
+          <el-form-item prop="username">
             <el-input
               v-model="loginForm.username"
-              placeholder="请输入用户名"
+              placeholder="请输入用户名(admin)"
               size="large"
               clearable
             >
@@ -22,10 +22,10 @@
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item prop="password">
             <el-input
               v-model="loginForm.password"
-              placeholder="请输入用户密码"
+              placeholder="请输入用户密码(123456)"
               size="large"
               clearable
               show-password
@@ -52,9 +52,20 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { LoginForm } from '@/types/index'
 
 import { reactive, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { MD5 } from 'crypto-js'
+import { ElMessage, ElNotification } from 'element-plus'
+
 import { User, Lock } from '@element-plus/icons-vue'
 
+import { timeWelcom } from '@/utils/index'
+import { useAuthStore } from '@/stores/auth'
+
 const appTitle = import.meta.env.VITE_APP_TITLE
+
+const authStore = useAuthStore()
+const $router = useRouter()
+const $route = useRoute()
 
 const loginFormRef = ref<FormInstance>()
 const loginForm = reactive<LoginForm>({
@@ -68,15 +79,35 @@ const loginRules = reactive<FormRules<LoginForm>>({
 
 const isLoading = ref(false)
 
-const login = () => {
+const login = async () => {
   if (!loginFormRef.value) {
     return
   }
-  loginFormRef.value.validate(async (valid) => {
+  await loginFormRef.value.validate(async (valid) => {
     if (valid) {
-      //
+      isLoading.value = true
+      try {
+        await authStore.login({
+          username: loginForm.username,
+          password: MD5(loginForm.password).toString()
+        })
+        isLoading.value = false
+        ElNotification({
+          title: timeWelcom(loginForm.username),
+          message: '欢迎回来',
+          type: 'success',
+          duration: 2000
+        })
+        const redirect = $route.query.redirect?.toString() || '/'
+        $router.replace({
+          path: redirect
+        })
+      } catch (error) {
+        isLoading.value = false
+        ElMessage.error('登录失败')
+      }
     } else {
-      return false
+      console.log('error login')
     }
   })
 }

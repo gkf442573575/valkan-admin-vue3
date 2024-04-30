@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
+import { useAuthStore } from '@/stores/auth'
+
 import NProgress from '@/utils/nprogress'
 
 import Layout from '@/layout/index.vue'
@@ -41,12 +43,28 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   NProgress.start()
-
   document.title = to.meta.title
     ? `${to.meta.title} | ${import.meta.env.VITE_APP_TITLE}`
     : import.meta.env.VITE_APP_TITLE
 
-  next()
+  const authStore = useAuthStore()
+  const token = authStore.getToken()
+  if (token) {
+    await authStore.getUserInfo()
+    next()
+  } else {
+    if (to.name === 'Login') {
+      next()
+    } else {
+      next({
+        path: '/login',
+        replace: true,
+        query: {
+          redirect: to.path
+        }
+      })
+    }
+  }
 })
 
 router.afterEach(() => {
