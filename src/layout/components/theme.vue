@@ -11,7 +11,7 @@
     />
   </div>
   <el-switch
-    class="dark-switch"
+    class="vk-dark-switch"
     v-model="themeStore.isDark"
     @change="themeStore.switchDark"
     inline-prompt
@@ -48,7 +48,7 @@ defineOptions({
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .vk-layout-header__icons {
   position: relative;
   .i-icon-theme {
@@ -78,7 +78,7 @@ defineOptions({
     }
   }
 }
-.dark-switch {
+.vk-dark-switch {
   padding: 0 10px;
 }
 </style>

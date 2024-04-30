@@ -1,7 +1,7 @@
 <template>
   <el-popover placement="bottom" title="布局样式" :width="290" trigger="click">
     <template #reference>
-      <div class="vk-layout-header_icons" title="布局样式">
+      <div class="vk-layout-header__icons" title="布局样式">
         <LayoutFour />
       </div>
     </template>

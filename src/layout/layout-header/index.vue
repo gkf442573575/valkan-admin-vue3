@@ -6,6 +6,8 @@
     <LayoutTab />
     <!-- 是否布局类型 -->
     <LayoutType />
+    <!--全屏-->
+    <FullScreen />
     <!--主题-->
     <Theme />
     <!-- 是否头像 -->
@@ -18,6 +20,7 @@ import LayoutTab from '../components/layout-tab.vue'
 import LayoutType from '../components/layout-type.vue'
 import Avatar from '../components/avatar.vue'
 import Theme from '../components/theme.vue'
+import FullScreen from '../components/full-screen.vue'
 
 const appTitle = import.meta.env.VITE_APP_TITLE
 
