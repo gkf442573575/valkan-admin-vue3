@@ -6,6 +6,8 @@
     <LayoutTab />
     <!-- 是否布局类型 -->
     <LayoutType />
+    <!--主题-->
+    <Theme />
     <!-- 是否头像 -->
     <Avatar />
   </div>
@@ -15,6 +17,7 @@
 import LayoutTab from '../components/layout-tab.vue'
 import LayoutType from '../components/layout-type.vue'
 import Avatar from '../components/avatar.vue'
+import Theme from '../components/theme.vue'
 
 const appTitle = import.meta.env.VITE_APP_TITLE
 

@@ -108,25 +108,23 @@ defineOptions({
       &:hover {
         box-shadow: 0 0 10px var(--el-color-primary-light-5);
       }
-
       > div {
         border-radius: 4px;
       }
-
       .head {
         width: 100%;
         height: 15px;
         margin-bottom: 5px;
         background-color: var(--el-color-primary-light-3);
       }
-      &__default {
+      &.vk-layout-style__default {
         .main {
           .aside {
             width: 22px;
           }
         }
       }
-      &__menuhead {
+      &.vk-layout-style__menuhead {
         .head {
           background-color: var(--el-color-primary);
         }
