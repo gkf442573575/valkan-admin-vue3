@@ -35,7 +35,7 @@ defineOptions({
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-avatar {
   margin-left: 8px;
   background-color: var(--el-color-primary);

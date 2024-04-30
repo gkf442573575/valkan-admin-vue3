@@ -62,7 +62,7 @@ defineOptions({
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .layout-head-icons .icon {
   font-size: 22px;
 }

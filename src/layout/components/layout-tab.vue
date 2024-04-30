@@ -18,7 +18,7 @@ defineOptions({
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .vk-toggle-tab {
   width: 40px;
   height: 40px;
