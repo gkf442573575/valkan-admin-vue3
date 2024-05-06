@@ -74,6 +74,7 @@ router.beforeEach(async (to, from, next) => {
     }
     // 获取用户信息
     await authStore.getUserInfo()
+    await authStore.getUserMenus()
     next()
   } else {
     if (to.name === 'Login') {

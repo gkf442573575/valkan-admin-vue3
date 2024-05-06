@@ -1,5 +1,5 @@
 /**
- * @instance 表格列
+ * @interface TableColItem 表格列
  */
 export interface TableColItem {
   type?: 'select' | 'index' // 是否选择列 或者 index
@@ -17,7 +17,7 @@ export interface TableColItem {
 }
 
 /**
- * @instance 登录表单
+ * @interface LoginForm 登录表单
  */
 export interface LoginForm {
   username: string
@@ -25,10 +25,39 @@ export interface LoginForm {
 }
 
 /**
- * @instance 用户信息
+ * @interface UserInfo 用户信息
  */
 export interface UserInfo {
   id: string
   username: string
   [key: string]: string
+}
+
+/**
+ * @interface MenuItem 菜单项
+ */
+export interface MenuItem {
+  id: string
+  path: string
+  parentId: string
+  title?: string
+  sort?: number // 排序
+  icon?: string
+  keepAlive?: boolean // 是否缓存
+}
+
+/**
+ * @desc 菜单项
+ */
+export interface AppMenuItem extends MenuItem {
+  name: string
+  isMain: boolean
+  isSub: boolean
+}
+
+/**
+ * @desc 菜单树
+ */
+export interface MenusTree extends AppMenuItem {
+  children: AppMenuItem[]
 }

@@ -1,4 +1,4 @@
-import type { LoginForm, UserInfo } from '@/types/index'
+import type { LoginForm, UserInfo, MenuItem } from '@/types/index'
 import type { MockResData } from './index'
 
 import { MD5, enc, AES } from 'crypto-js'
@@ -6,7 +6,52 @@ import { v4 as uuidV4 } from 'uuid'
 
 import { successRes, failRes } from './index'
 
+interface menuData {
+  [key: string]: MenuItem[]
+}
+
 const mockUsers = ['admin', 'user']
+
+// 默认菜单
+const normalMenus: MenuItem[] = [
+  {
+    id: '1',
+    path: '/home',
+    title: '首页',
+    parentId: '#',
+    sort: 0,
+    icon: 'home'
+  }
+]
+
+// 用户菜单
+const userMenus: menuData = {
+  admin: [
+    ...normalMenus,
+    {
+      id: '3',
+      path: '#',
+      title: '系统设置',
+      parentId: '#',
+      sort: 0
+    },
+    {
+      id: '3-1',
+      path: '/system/account',
+      title: '账号管理',
+      parentId: '3',
+      sort: 0
+    },
+    {
+      id: '3-2',
+      path: '/system/users',
+      title: '角色管理',
+      parentId: '3',
+      sort: 0
+    }
+  ],
+  user: [...normalMenus]
+}
 
 export const AES_KEY = enc.Utf8.parse('xhd6l6pgczo3r4i6').toString(enc.Hex)
 
@@ -69,6 +114,24 @@ export const mockUserInfo = (token: string): Promise<MockResData<UserInfo>> => {
           id: uuidV4()
         }
         resolve(successRes(info))
+      } else {
+        reject(failRes())
+      }
+    }, 300)
+  })
+}
+
+/**
+ * @desc 获取用户的菜单
+ * @param token
+ * @returns
+ */
+export const mockUserMenus = (token: string): Promise<MockResData<MenuItem[]>> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const user = getUserByToken(token)
+      if (user) {
+        resolve(successRes(userMenus[user.username]))
       } else {
         reject(failRes())
       }
