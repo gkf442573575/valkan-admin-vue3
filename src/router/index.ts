@@ -31,8 +31,23 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: '登录'
     }
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error/404.vue'),
+    name: 'Error404',
+    meta: {
+      title: '404'
+    }
   }
 ]
+
+// 404
+const err404Route: RouteRecordRaw = {
+  path: '/:pcatchAll(.*)*',
+  redirect: '/404',
+  meta: { hidden: true }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
