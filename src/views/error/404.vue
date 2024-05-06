@@ -11,10 +11,17 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+
 import lottie, { type AnimationItem } from 'lottie-web'
+import LottiePalette from 'lottie-palette'
+
+import { useThemeStore } from '@/stores/theme'
 
 import animation404 from '@/assets/lotties/404.json'
 const $router = useRouter()
+
+const { primary, primaryList, primaryDark2, isDark } = storeToRefs(useThemeStore())
 
 const error404Ref = ref<HTMLDivElement>()
 
@@ -33,8 +40,21 @@ onMounted(() => {
       container: error404Ref.value,
       renderer: 'svg',
       loop: true,
-      autoplay: false,
-      animationData: animation404
+      autoplay: true,
+      animationData: animation404,
+      rendererSettings: {
+        progressiveLoad: false
+      }
+    })
+
+    lottieAni.addEventListener('DOMLoaded', () => {
+      const lp = new LottiePalette(error404Ref.value)
+      lp.updateColor('rgb(38,91,255)', primary.value, true)
+      lp.updateColor('rgb(31,65,179)', primaryDark2.value, true)
+      lp.updateColor('rgb(114,150,254)', primaryList.value[3], true)
+      if (isDark.value) {
+        lp.updateColor('rgb(241,244,254)', '#1d1e1f', true)
+      }
     })
   }
 })

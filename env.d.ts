@@ -15,3 +15,5 @@ interface ImportMetaEnv {
    */
   readonly VITE_APP_BASE_PATH: string
 }
+
+declare module 'lottie-palette'

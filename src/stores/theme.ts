@@ -9,13 +9,17 @@ const THEME_KEY = `THEME_CONFIG_${import.meta.env.VITE_APP_CODE}`
 export interface LocalTheme {
   primary: string // 主题颜色
   isDark: boolean // 是否暗黑主题
+  primaryList: string[] // 主题颜色列表
+  primaryDark2: string // 主题颜色的dark2
 }
 
 export const useThemeStore = defineStore('vk-theme', {
   state: (): LocalTheme => {
     return {
       isDark: false,
-      primary: DEFAULT_PRIMARY
+      primary: DEFAULT_PRIMARY,
+      primaryList: [],
+      primaryDark2: ''
     }
   },
   actions: {
@@ -37,16 +41,14 @@ export const useThemeStore = defineStore('vk-theme', {
       }
       // 为了兼容暗黑模式下主题颜色也正常，以下方法计算主题颜色 由深到浅 的具体颜色
       document.documentElement.style.setProperty('--el-color-primary', val)
-      document.documentElement.style.setProperty(
-        '--el-color-primary-dark-2',
-        this.isDark ? `${getLightColor(val, 0.2)}` : `${getDarkColor(val, 0.3)}`
-      )
+      // 暗黑模式下主题颜色
+      this.primaryDark2 = this.isDark ? `${getLightColor(val, 0.2)}` : `${getDarkColor(val, 0.3)}`
+      document.documentElement.style.setProperty('--el-color-primary-dark-2', this.primaryDark2)
       // 颜色加深或变浅
       for (let i = 1; i <= 9; i++) {
-        document.documentElement.style.setProperty(
-          `--el-color-primary-light-${i}`,
-          this.isDark ? `${getDarkColor(val, i / 10)}` : `${getLightColor(val, i / 10)}`
-        )
+        const color = this.isDark ? `${getDarkColor(val, i / 10)}` : `${getLightColor(val, i / 10)}`
+        document.documentElement.style.setProperty(`--el-color-primary-light-${i}`, color)
+        this.primaryList.push(color)
       }
       // 设置参数
       this.primary = val
