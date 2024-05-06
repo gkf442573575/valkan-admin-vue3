@@ -18,7 +18,7 @@ $aside-sub-w: 181;
 }
 
 .vk-layout-header {
-  height: $layout-header-h * 1px;
+  height: #{$layout-header-h}px;
   background-color: var(--el-bg-color);
   padding: 0 15px;
   .vk-app-title {
@@ -44,4 +44,8 @@ $aside-sub-w: 181;
       height: 40px;
     }
   }
+}
+
+.vk-layout-main {
+  height: calc(100% - #{$layout-header-h}px);
 }

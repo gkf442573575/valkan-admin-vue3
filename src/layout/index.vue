@@ -1,7 +1,9 @@
 <template>
   <div class="vk-layout w_10_h_10">
     <LayoutHeader />
-    <RouterView />
+    <div class="vk-layout-main">
+      <RouterView />
+    </div>
   </div>
 </template>
 
