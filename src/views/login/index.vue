@@ -16,6 +16,7 @@
               placeholder="请输入用户名(admin)"
               size="large"
               clearable
+              @keyup.enter="login"
             >
               <template #prefix>
                 <el-icon class="el-input__icon"><User /></el-icon>
@@ -29,6 +30,7 @@
               size="large"
               clearable
               show-password
+              @keyup.enter="login"
             >
               <template #prefix>
                 <el-icon class="el-input__icon"><Lock /></el-icon>

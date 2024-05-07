@@ -5,7 +5,7 @@ import jsCookie from 'js-cookie'
 
 import { TOKEN_EXPIRE } from '@/config/index'
 
-import { createAppMenus } from '@/router/router-tool'
+import { createAppMenus, createMenusTree } from '@/router/router-tool'
 
 import { mockLogin, mockUserInfo, mockUserMenus } from '@/mock/user'
 
@@ -24,7 +24,9 @@ export const useAuthStore = defineStore('vk-auth', {
     user: null,
     appMenus: []
   }),
-  getters: {},
+  getters: {
+    menusTree: (state) => createMenusTree(state.appMenus)
+  },
   actions: {
     // 获取token
     getToken() {

@@ -1,20 +1,10 @@
 import type { Router } from 'vue-router'
-import type { MenuItem, AppMenuItem } from '@/types/index'
+import type { MenuItem, AppMenuItem, MenusTree, BaseMenuItem } from '@/types/index'
 
 import { v4 as uuidv4 } from 'uuid'
+import { isNotEmpty } from 'class-validator'
 
-/**
- * @interface NewRouteItem 新路由
- */
-interface NewRouteItem {
-  path: string // 路径
-  title?: string // 标题
-  icon?: string // 图标
-  isMain?: boolean // 是否是主菜单
-  isSub?: boolean // 是否是二级菜单
-  sort?: number // 排序
-  keepAlive?: boolean // 是否缓存
-}
+import Layout from '@/layout/index.vue'
 
 /**
  * @desc 所有视图
@@ -32,27 +22,23 @@ const PATH_TO_VIEW: { [key: string]: string } = {
 }
 
 /**
- * @desc 新添加的路由
+ * @desc 新添加的路由 以 parentId 为key
  */
-const NEW_ROUTES: { [key: string]: NewRouteItem[] } = {
-  // 可以给根目录添加 为后面的路径添加树
-  '/': [
+const NEW_ROUTES: { [key: string]: BaseMenuItem[] } = {
+  '#': [
     {
       path: '/editor',
-      title: '编辑器',
-      isMain: true
+      title: '编辑器'
     }
   ],
   '/editor': [
     {
-      path: '/editor/sql',
-      title: 'SQL编辑器',
-      isSub: true
+      path: '/editor/json',
+      title: 'JSON编辑器'
     },
     {
-      path: '/editor/json',
-      title: 'JSON编辑器',
-      isSub: true
+      path: '/editor/sql',
+      title: 'SQL编辑器'
     }
   ]
 }
@@ -99,12 +85,12 @@ const getComByPath = (path: string) => {
   return findCom
 }
 
-/**
- * @desc 创建应用菜单
- * @param menus
- */
-export const createAppMenus = (menus: MenuItem[]) => {
-  const allMenus: AppMenuItem[] = []
+// 合并新路由和旧路由
+const mergeRoutes = (menus: MenuItem[]) => {
+  // 添加的新的主路由
+  const newMainPath: BaseMenuItem[] = NEW_ROUTES['#'] || []
+  const mainMenus = []
+  // 查找所有主路由取出主路由
   for (let i = 0; i < menus.length; i++) {
     const item = menus[i]
     const isMain = item.parentId === '#'
@@ -119,45 +105,186 @@ export const createAppMenus = (menus: MenuItem[]) => {
       const mainPath = path
       path = mainPath === '#' ? childMenus[0].path : path
       path = mainPath === '#' ? `/${path.split('/')[1]}` : path
+      item.path = path
+      mainMenus.push({
+        ...item,
+        path
+      })
     }
-    // 是否是二级菜单， 父表单是根表单
-    const isSub =
-      menus.findIndex(
-        (menuItem) => menuItem.id === item.parentId && menuItem.parentId === '#' && !isMain
-      ) > -1
-
-    const pushItem: AppMenuItem = {
-      ...item,
-      path,
-      isMain,
-      isSub,
-      sort: item.sort || 0,
-      name: pathToRouteName(path),
-      keepAlive: !!item.keepAlive
-    }
-    allMenus.push(pushItem)
   }
-  // 通过路径添加
-  for (const parentPath of Object.keys(NEW_ROUTES)) {
-    const childs = NEW_ROUTES[parentPath]
+  // 将新增的路由添加到路由树中
+  for (let i = 0; i < newMainPath.length; i++) {
+    const item = newMainPath[i]
+    const path = item.path
+    const findMain = mainMenus.find((item) => item.path === path)
+    let parent: MenuItem = {
+      ...item,
+      id: uuidv4(),
+      parentId: '#'
+    }
+    // 如果 后台传递过来的有这个路由菜单
+    if (findMain) {
+      parent = {
+        ...findMain
+      }
+    }
+    if (parent.path === '#') {
+      console.error('在新增路由中，准确添加路由树')
+      continue
+    }
+    const childs = NEW_ROUTES[path] || []
+    // 没有子路由不执行
     if (!childs.length) {
       continue
     }
-    const parent = allMenus.find((item) => item.path === parentPath)
-    childs.forEach((item) => {
-      allMenus.push({
+    // 如果没在主路由里
+    if (!findMain) {
+      menus.push(parent)
+    }
+    childs.forEach((child) => {
+      menus.push({
+        ...child,
         id: uuidv4(),
-        path: item.path,
-        parentId: parentPath === '/' ? '#' : parent ? parent.id : '#', // 当无父级时，父级id为#
-        isMain: !!item.isMain,
-        isSub: !!item.isSub,
-        title: item.title || '',
-        sort: item.sort || 0,
-        name: pathToRouteName(item.path),
-        keepAlive: !!item.keepAlive
+        parentId: parent.id
       })
     })
   }
-  console.log('allMenus >>>', allMenus)
-  return allMenus
+  return menus
+}
+
+const isMainMenu = (item: string) => {}
+
+/**
+ * @desc 创建应用菜单
+ * @param menus
+ */
+export const createAppMenus = (menus: MenuItem[]) => {
+  const appMenus: AppMenuItem[] = []
+  const allMenus = mergeRoutes(menus)
+  for (let i = 0; i < allMenus.length; i++) {
+    const item = allMenus[i]
+    const isMain = 'isMain' in item ? !!item.isMain : item.parentId === '#'
+    // 是否是二级菜单， 父表单是根表单
+    const isSub =
+      'isSub' in item
+        ? !!item.isSub
+        : allMenus.findIndex(
+            (menuItem) => menuItem.id === item.parentId && menuItem.parentId === '#' && !isMain
+          ) > -1
+
+    const pushItem: AppMenuItem = {
+      ...item,
+      isMain,
+      isSub,
+      sort: item.sort || 0,
+      name: item.name || pathToRouteName(item.path),
+      icon: item.icon || 'application-menu',
+      keepAlive: !!item.keepAlive
+    }
+    appMenus.push(pushItem)
+  }
+  console.log('appMenus >>>', appMenus)
+  return appMenus
+}
+
+/**
+ * @desc 创建菜单树
+ * @param menus
+ * @returns
+ */
+export const createMenusTree = (menus: AppMenuItem[]) => {
+  const menusTree: MenusTree[] = []
+  const mainMenus = menus
+    .filter((item) => item.isMain)
+    .sort((a, b) => (b.sort || 0) - (a.sort || 0))
+  for (let i = 0; i < mainMenus.length; i++) {
+    const item = mainMenus[i]
+    const children = menus
+      .filter((subItem) => subItem.parentId === item.id && subItem.isSub)
+      .sort((a, b) => (b.sort || 0) - (a.sort || 0))
+    menusTree.push({
+      ...item,
+      children: children || []
+    })
+  }
+  return menusTree
+}
+
+/**
+ * @desc 创建路由
+ * @param menus
+ * @param router
+ */
+export const createAppRoutes = (menus: AppMenuItem[], router: Router) => {
+  const mainMenus = menus
+    .filter((item) => item.isMain)
+    .sort((a, b) => (b.sort || 0) - (a.sort || 0))
+
+  // 先创建layout的根路由
+  router.addRoute({
+    path: '/',
+    component: Layout,
+    redirect: mainMenus[0].path,
+    name: 'Layout',
+    children: []
+  })
+
+  for (let i = 0; i < mainMenus.length; i++) {
+    const main = mainMenus[i]
+    const children = menus
+      .filter((subItem) => subItem.parentId === main.id)
+      .sort((a, b) => (b.sort || 0) - (a.sort || 0))
+    if (children.length) {
+      router.addRoute('Layout', {
+        path: main.path,
+        redirect: children[0].path,
+        name: main.name,
+        meta: {
+          id: main.id,
+          title: main.title,
+          icon: main.icon,
+          isMain: main.isMain,
+          isSub: main.isSub
+        }
+      })
+      for (let j = 0; j < children.length; j++) {
+        const child = children[j]
+        const routeComponent = getComByPath(child.path)
+        if (!routeComponent) {
+          continue
+        }
+        router.addRoute(main.name, {
+          path: child.path,
+          component: routeComponent,
+          name: child.name,
+          meta: {
+            id: child.id,
+            title: child.title,
+            icon: child.icon,
+            isMain: false,
+            isSub: child.isSub,
+            keepAlive: child.keepAlive
+          }
+        })
+      }
+    } else {
+      const routeComponent = getComByPath(main.path)
+      if (!routeComponent) {
+        continue
+      }
+      router.addRoute('Layout', {
+        path: main.path,
+        component: routeComponent,
+        name: main.name,
+        meta: {
+          id: main.id,
+          title: main.title,
+          icon: main.icon,
+          isMain: main.isMain,
+          isSub: false,
+          keepAlive: main.keepAlive
+        }
+      })
+    }
+  }
 }

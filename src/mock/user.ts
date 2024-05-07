@@ -41,13 +41,6 @@ const userMenus: menuData = {
       title: '账号管理',
       parentId: '3',
       sort: 0
-    },
-    {
-      id: '3-2',
-      path: '/system/users',
-      title: '角色管理',
-      parentId: '3',
-      sort: 0
     }
   ],
   user: [...normalMenus]

@@ -34,16 +34,25 @@ export interface UserInfo {
 }
 
 /**
- * @interface MenuItem 菜单项
+ * @interface BaseMenuItem 默认菜单项
  */
-export interface MenuItem {
-  id: string
+export interface BaseMenuItem {
   path: string
-  parentId: string
+  name?: string
   title?: string
   sort?: number // 排序
-  icon?: string
+  icon?: string // 图标
+  isMain?: boolean // 是否显示到主菜单
+  isSub?: boolean // 是否是二级
   keepAlive?: boolean // 是否缓存
+}
+
+/**
+ * @interface MenuItem 菜单项
+ */
+export interface MenuItem extends BaseMenuItem {
+  id: string
+  parentId: string
 }
 
 /**
@@ -53,6 +62,7 @@ export interface AppMenuItem extends MenuItem {
   name: string
   isMain: boolean
   isSub: boolean
+  keepAlive: boolean
 }
 
 /**

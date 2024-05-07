@@ -4,26 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 
 import NProgress from '@/utils/nprogress'
 
-import Layout from '@/layout/index.vue'
-
 const routes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    name: 'Layout',
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/home/index.vue'),
-        name: 'Home',
-        meta: {
-          title: '首页',
-          icon: 'home'
-        }
-      }
-    ]
-  },
   {
     path: '/login',
     component: () => import('@/views/login/index.vue'),
@@ -39,15 +20,13 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: '404'
     }
+  },
+  {
+    path: '/:pcatchAll(.*)*',
+    redirect: '/404',
+    meta: { hidden: true }
   }
 ]
-
-// 404
-const err404Route: RouteRecordRaw = {
-  path: '/:pcatchAll(.*)*',
-  redirect: '/404',
-  meta: { hidden: true }
-}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
