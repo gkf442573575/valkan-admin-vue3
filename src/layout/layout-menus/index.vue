@@ -4,6 +4,6 @@
 
 <script setup lang="ts">
 defineOptions({
-  name: 'vk-layout-aside'
+  name: 'vk-layout-menus'
 })
 </script>

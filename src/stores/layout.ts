@@ -16,7 +16,9 @@ interface LayoutParams {
 
 export const useLayoutStore = defineStore('vk-layout', () => {
   const layout = ref('default')
-  const isExpand = ref(true)
+  // 是否折叠
+  const isCollapse = ref(false)
+  // 中间区域视图高度
   const viewHeight = ref(0)
   // tabs是否可见
   const visibleTabs = ref(true)
@@ -44,8 +46,8 @@ export const useLayoutStore = defineStore('vk-layout', () => {
   }
 
   // 是否折叠侧边栏
-  const changeExpand = (val: boolean) => {
-    isExpand.value = val
+  const changeCollapse = (val: boolean) => {
+    isCollapse.value = val
   }
 
   // 视图变化高度
@@ -54,13 +56,13 @@ export const useLayoutStore = defineStore('vk-layout', () => {
   }
 
   return {
-    isExpand,
+    isCollapse,
     layout,
     visibleTabs,
     viewHeight,
     initLayout,
     setLayout,
-    changeExpand,
+    changeCollapse,
     changeViewHeight
   }
 })
