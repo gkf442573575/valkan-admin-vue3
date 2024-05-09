@@ -1,4 +1,4 @@
-import type { LoginForm, UserInfo, AppMenuItem } from '@/types/index'
+import type { LoginForm, UserInfo, AppMenuItem, MenusTree } from '@/types/index'
 
 import { defineStore } from 'pinia'
 import jsCookie from 'js-cookie'
@@ -13,6 +13,8 @@ export interface AuthState {
   token: string
   user: UserInfo | null
   appMenus: AppMenuItem[]
+  appMenusTree: MenusTree[]
+  hasAddRoutes: boolean
 }
 
 // token key
@@ -22,12 +24,14 @@ export const useAuthStore = defineStore('vk-auth', {
   state: (): AuthState => ({
     token: '',
     user: null,
-    appMenus: []
+    appMenus: [],
+    appMenusTree: [],
+    hasAddRoutes: false
   }),
-  getters: {
-    menusTree: (state) => createMenusTree(state.appMenus)
-  },
   actions: {
+    setAddStatus(hasAdd: boolean) {
+      this.hasAddRoutes = hasAdd
+    },
     // 获取token
     getToken() {
       if (this.token) {
@@ -85,18 +89,19 @@ export const useAuthStore = defineStore('vk-auth', {
     },
     // 获取用户菜单
     getUserMenus() {
-      return new Promise<AppMenuItem[]>(async (resolve, reject) => {
+      return new Promise<MenusTree[]>(async (resolve, reject) => {
         try {
           if (!this.token) {
             throw new Error('token不存在')
           }
-          if (this.appMenus && this.appMenus.length) {
-            return resolve(this.appMenus)
+          if (this.appMenusTree && this.appMenusTree.length) {
+            return resolve(this.appMenusTree)
           }
           const res = await mockUserMenus(this.token)
           if (res.data) {
             this.appMenus = createAppMenus(res.data)
-            resolve(this.appMenus)
+            this.appMenusTree = createMenusTree(this.appMenus)
+            resolve(this.appMenusTree)
           } else {
             throw new Error('获取菜单失败')
           }

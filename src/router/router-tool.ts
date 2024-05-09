@@ -3,6 +3,7 @@ import type { MenuItem, AppMenuItem, MenusTree, BaseMenuItem } from '@/types/ind
 
 import { v4 as uuidv4 } from 'uuid'
 import { isNotEmpty } from 'class-validator'
+import { cloneDeep } from 'lodash'
 
 import Layout from '@/layout/index.vue'
 
@@ -21,27 +22,30 @@ const PATH_TO_VIEW: { [key: string]: string } = {
   '/system/account': 'system/account.vue'
 }
 
-/**
- * @desc 新添加的路由 以 parentId 为key
- */
-const NEW_ROUTES: { [key: string]: BaseMenuItem[] } = {
-  '#': [
-    {
-      path: '/editor',
-      title: '编辑器'
-    }
-  ],
-  '/editor': [
-    {
-      path: '/editor/json',
-      title: 'JSON编辑器'
-    },
-    {
-      path: '/editor/sql',
-      title: 'SQL编辑器'
-    }
-  ]
+interface NewMenuItem extends BaseMenuItem {
+  children?: NewMenuItem[]
 }
+
+/**
+ * @desc 新添加的菜单项
+ */
+const NEW_MENUS: NewMenuItem[] = [
+  {
+    path: '/editor',
+    parentId: '#',
+    title: '编辑器',
+    children: [
+      { path: '/editor/json', title: 'JSON编辑器' },
+      { path: '/editor/sql', title: 'SQL编辑器' }
+    ]
+  },
+  {
+    path: '/system',
+    parentId: '#',
+    title: '系统设置',
+    children: [{ path: '/system/account', title: '账号管理', isSub: false }]
+  }
+]
 
 /**
  * @desc 首字母大写
@@ -71,88 +75,79 @@ const pathToRouteName = (path: string) => {
  * @returns
  */
 const getComByPath = (path: string) => {
-  path = `../views/${path}`
   const findView = PATH_TO_VIEW[path]
   if (!findView) {
     console.error('提示开发人员，添加路径对应路由文件')
     return null
   }
-  const findCom = ALL_VIEWS[findView]
+  const findCom = ALL_VIEWS[`../views/${findView}`]
   if (!findCom) {
-    console.error('提示开发人员，添加路由文件')
     return null
   }
   return findCom
 }
 
-// 合并新路由和旧路由
+const changeMainPath = (item: BaseMenuItem, childs: BaseMenuItem[]) => {
+  let path = item.path
+  if (!childs.length && path === '#') {
+    throw new Error('请准确添加路由树')
+  }
+  const mainPath = path
+  path = mainPath === '#' ? childs[0].path : path
+  path = mainPath === '#' ? `/${path.split('/')[1]}` : path
+  return path
+}
+
+/**
+ * @desc 合并路由
+ * @param menus 后台返回的路由树
+ * @returns
+ */
 const mergeRoutes = (menus: MenuItem[]) => {
-  // 添加的新的主路由
-  const newMainPath: BaseMenuItem[] = NEW_ROUTES['#'] || []
-  const mainMenus = []
-  // 查找所有主路由取出主路由
   for (let i = 0; i < menus.length; i++) {
     const item = menus[i]
     const isMain = item.parentId === '#'
-    let path = item.path
     if (isMain) {
       const childMenus = menus.filter((child) => child.parentId === item.id)
-      // 当无子菜单，并路径还是 # 时，表示当前菜单无子菜单，且路径为根路径，此时需要添加根路径
-      if (!childMenus.length && path === '#') {
-        console.error('请准确添加路由树')
-        continue
-      }
-      const mainPath = path
-      path = mainPath === '#' ? childMenus[0].path : path
-      path = mainPath === '#' ? `/${path.split('/')[1]}` : path
-      item.path = path
-      mainMenus.push({
-        ...item,
-        path
-      })
+      item.path = changeMainPath(item, childMenus)
+      item.isMain = true
     }
   }
-  // 将新增的路由添加到路由树中
-  for (let i = 0; i < newMainPath.length; i++) {
-    const item = newMainPath[i]
-    const path = item.path
-    const findMain = mainMenus.find((item) => item.path === path)
-    let parent: MenuItem = {
-      ...item,
-      id: uuidv4(),
-      parentId: '#'
-    }
-    // 如果 后台传递过来的有这个路由菜单
-    if (findMain) {
-      parent = {
-        ...findMain
+  // 递归获取新增路由
+  const dts = (list: NewMenuItem[], parentId: string) => {
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i]
+      let path = item.path
+      if (item.parentId && item.parentId === '#') {
+        path = changeMainPath(item, item.children || [])
+      }
+      // 现是否存在相同的path
+      const menuItem = menus.find((c) => c.path === path)
+      let nextId = ''
+      if (menuItem) {
+        nextId = menuItem.id
+      } else {
+        const current = cloneDeep(item)
+        delete current.children
+        nextId = uuidv4()
+        const curentParentId = item.parentId || parentId
+        const isMain = isNotEmpty(current.isMain) ? !!current.isMain : curentParentId === '#'
+        menus.push({
+          ...current,
+          id: nextId,
+          parentId: curentParentId,
+          isMain
+        })
+      }
+      // 下一级
+      if (item.children && item.children.length) {
+        dts(item.children, nextId)
       }
     }
-    if (parent.path === '#') {
-      console.error('在新增路由中，准确添加路由树')
-      continue
-    }
-    const childs = NEW_ROUTES[path] || []
-    // 没有子路由不执行
-    if (!childs.length) {
-      continue
-    }
-    // 如果没在主路由里
-    if (!findMain) {
-      menus.push(parent)
-    }
-    childs.forEach((child) => {
-      menus.push({
-        ...child,
-        id: uuidv4(),
-        parentId: parent.id
-      })
-    })
   }
+  dts(NEW_MENUS, '#')
   return menus
 }
-
-const isMainMenu = (item: string) => {}
 
 /**
  * @desc 创建应用菜单
@@ -163,19 +158,14 @@ export const createAppMenus = (menus: MenuItem[]) => {
   const allMenus = mergeRoutes(menus)
   for (let i = 0; i < allMenus.length; i++) {
     const item = allMenus[i]
-    const isMain = 'isMain' in item ? !!item.isMain : item.parentId === '#'
-    // 是否是二级菜单， 父表单是根表单
-    const isSub =
-      'isSub' in item
-        ? !!item.isSub
-        : allMenus.findIndex(
-            (menuItem) => menuItem.id === item.parentId && menuItem.parentId === '#' && !isMain
-          ) > -1
-
+    const isMain = !!item.isMain
+    // 不是主菜单并且上一级是主菜单的才算到二级菜单中
+    const subIndex = allMenus.findIndex((c) => c.id === item.parentId && c.isMain && !isMain)
+    const isSub = isNotEmpty(item.isSub) ? !!item.isSub : subIndex > -1
     const pushItem: AppMenuItem = {
       ...item,
-      isMain,
-      isSub,
+      isMain, // true 位于主菜单
+      isSub, // true 位于 二级菜单
       sort: item.sort || 0,
       name: item.name || pathToRouteName(item.path),
       icon: item.icon || 'application-menu',
@@ -183,7 +173,6 @@ export const createAppMenus = (menus: MenuItem[]) => {
     }
     appMenus.push(pushItem)
   }
-  console.log('appMenus >>>', appMenus)
   return appMenus
 }
 
@@ -192,21 +181,19 @@ export const createAppMenus = (menus: MenuItem[]) => {
  * @param menus
  * @returns
  */
-export const createMenusTree = (menus: AppMenuItem[]) => {
+export const createMenusTree = (menus: AppMenuItem[], parentId: string = '#') => {
   const menusTree: MenusTree[] = []
-  const mainMenus = menus
-    .filter((item) => item.isMain)
-    .sort((a, b) => (b.sort || 0) - (a.sort || 0))
-  for (let i = 0; i < mainMenus.length; i++) {
-    const item = mainMenus[i]
-    const children = menus
-      .filter((subItem) => subItem.parentId === item.id && subItem.isSub)
-      .sort((a, b) => (b.sort || 0) - (a.sort || 0))
-    menusTree.push({
-      ...item,
-      children: children || []
-    })
+  for (let i = 0; i < menus.length; i++) {
+    const item = menus[i]
+    if (item.parentId === parentId) {
+      const children = createMenusTree(menus, item.id)
+      menusTree.push({
+        ...item,
+        children: children || []
+      })
+    }
   }
+  menusTree.sort((a, b) => (b.sort || 0) - (a.sort || 0))
   return menusTree
 }
 
@@ -215,76 +202,48 @@ export const createMenusTree = (menus: AppMenuItem[]) => {
  * @param menus
  * @param router
  */
-export const createAppRoutes = (menus: AppMenuItem[], router: Router) => {
-  const mainMenus = menus
-    .filter((item) => item.isMain)
-    .sort((a, b) => (b.sort || 0) - (a.sort || 0))
-
+export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
   // 先创建layout的根路由
   router.addRoute({
     path: '/',
     component: Layout,
-    redirect: mainMenus[0].path,
-    name: 'Layout',
+    redirect: menusTree[0].path,
+    name: 'VKLayout',
     children: []
   })
-
-  for (let i = 0; i < mainMenus.length; i++) {
-    const main = mainMenus[i]
-    const children = menus
-      .filter((subItem) => subItem.parentId === main.id)
-      .sort((a, b) => (b.sort || 0) - (a.sort || 0))
-    if (children.length) {
-      router.addRoute('Layout', {
-        path: main.path,
-        redirect: children[0].path,
-        name: main.name,
-        meta: {
-          id: main.id,
-          title: main.title,
-          icon: main.icon,
-          isMain: main.isMain,
-          isSub: main.isSub
-        }
-      })
-      for (let j = 0; j < children.length; j++) {
-        const child = children[j]
-        const routeComponent = getComByPath(child.path)
-        if (!routeComponent) {
+  const dts = (list: MenusTree[], parentName: string = 'VKLayout') => {
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i]
+      const children = item.children || []
+      const meta = {
+        id: item.id,
+        title: item.title,
+        icon: item.icon,
+        isMain: item.isMain,
+        isSub: item.isSub
+      }
+      if (children.length) {
+        router.addRoute(parentName, {
+          path: item.path,
+          name: item.name,
+          redirect: children[0].path,
+          meta
+        })
+        // 递归，创建子路由
+        dts(children, item.name)
+      } else {
+        const currentComponent = getComByPath(item.path)
+        if (!currentComponent) {
           continue
         }
-        router.addRoute(main.name, {
-          path: child.path,
-          component: routeComponent,
-          name: child.name,
-          meta: {
-            id: child.id,
-            title: child.title,
-            icon: child.icon,
-            isMain: false,
-            isSub: child.isSub,
-            keepAlive: child.keepAlive
-          }
+        router.addRoute(parentName, {
+          path: item.path,
+          name: item.name,
+          component: currentComponent,
+          meta
         })
       }
-    } else {
-      const routeComponent = getComByPath(main.path)
-      if (!routeComponent) {
-        continue
-      }
-      router.addRoute('Layout', {
-        path: main.path,
-        component: routeComponent,
-        name: main.name,
-        meta: {
-          id: main.id,
-          title: main.title,
-          icon: main.icon,
-          isMain: main.isMain,
-          isSub: false,
-          keepAlive: main.keepAlive
-        }
-      })
     }
   }
+  dts(menusTree)
 }

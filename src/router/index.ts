@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import { useAuthStore } from '@/stores/auth'
+import { createMenusTree, createAppRoutes } from './router-tool'
 
 import NProgress from '@/utils/nprogress'
 
@@ -20,13 +21,14 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: '404'
     }
-  },
-  {
-    path: '/:pcatchAll(.*)*',
-    redirect: '/404',
-    meta: { hidden: true }
   }
 ]
+
+const err404Route: RouteRecordRaw = {
+  path: '/:pcatchAll(.*)*',
+  redirect: '/404',
+  meta: { hidden: true }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,10 +53,20 @@ router.beforeEach(async (to, from, next) => {
       })
       return
     }
-    // 获取用户信息
-    await authStore.getUserInfo()
-    await authStore.getUserMenus()
-    next()
+    const hasAddRoutes = authStore.hasAddRoutes
+    // TODO:是否创建路由, 登出的时候，设置为false
+    if (!hasAddRoutes) {
+      await authStore.getUserInfo()
+      const appMenusTree = await authStore.getUserMenus()
+      createAppRoutes(appMenusTree, router)
+      authStore.setAddStatus(true)
+      // 添加404错误路由
+      router.addRoute(err404Route)
+      // 跳转
+      next({ ...to, replace: true })
+    } else {
+      next()
+    }
   } else {
     if (to.name === 'Login') {
       next()

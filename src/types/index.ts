@@ -37,7 +37,9 @@ export interface UserInfo {
  * @interface BaseMenuItem 默认菜单项
  */
 export interface BaseMenuItem {
+  id?: string
   path: string
+  parentId?: string
   name?: string
   title?: string
   sort?: number // 排序
@@ -69,5 +71,5 @@ export interface AppMenuItem extends MenuItem {
  * @desc 菜单树
  */
 export interface MenusTree extends AppMenuItem {
-  children: AppMenuItem[]
+  children: MenusTree[]
 }
