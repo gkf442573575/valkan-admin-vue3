@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 import storage from '@/utils/storage'
-import { getLightColor, getDarkColor } from '@/utils/theme-tool'
+import { nextLevelColor } from '@/utils/theme-tool'
 import { DEFAULT_PRIMARY } from '@/config/index'
 
 const THEME_KEY = `THEME_CONFIG_${import.meta.env.VITE_APP_CODE}`
@@ -42,11 +42,11 @@ export const useThemeStore = defineStore('vk-theme', {
       // 为了兼容暗黑模式下主题颜色也正常，以下方法计算主题颜色 由深到浅 的具体颜色
       document.documentElement.style.setProperty('--el-color-primary', val)
       // 暗黑模式下主题颜色
-      this.primaryDark2 = this.isDark ? `${getLightColor(val, 0.2)}` : `${getDarkColor(val, 0.3)}`
+      this.primaryDark2 = nextLevelColor(val, this.isDark ? 2 : 3, this.isDark)
       document.documentElement.style.setProperty('--el-color-primary-dark-2', this.primaryDark2)
       // 颜色加深或变浅
       for (let i = 1; i <= 9; i++) {
-        const color = this.isDark ? `${getDarkColor(val, i / 10)}` : `${getLightColor(val, i / 10)}`
+        const color = nextLevelColor(val, i, this.isDark)
         document.documentElement.style.setProperty(`--el-color-primary-light-${i}`, color)
         this.primaryList.push(color)
       }
