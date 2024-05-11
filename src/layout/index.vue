@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide } from 'vue'
+import { provide, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useLayoutStore, useKeepAliveStore } from '@/stores/layout'
@@ -36,13 +36,44 @@ import LayoutHeader from './layout-header/index.vue'
 import LayoutMenus from './layout-menus/index.vue'
 import LayoutTabs from './layout-tabs/index.vue'
 
-const { layout, isCollapse, visibleTabs } = storeToRefs(useLayoutStore())
+const layoutStore = useLayoutStore()
+
+const { layout, isCollapse, visibleTabs } = storeToRefs(layoutStore)
 const { keepAliveName } = storeToRefs(useKeepAliveStore())
+
+const layoutViewRef = ref<Element>()
 
 // 刷新页面
 const isShowRoute = ref(true)
 const refresh = (val: boolean) => (isShowRoute.value = val)
 provide('refresh', refresh)
+
+// 监听窗口变化
+const windowResize = () => {
+  if (!layoutViewRef.value) {
+    return
+  }
+  // 监听窗口变化
+  const viewH = layoutViewRef.value.clientHeight - 30
+  layoutStore.changeViewHeight(viewH)
+}
+
+watch(
+  () => visibleTabs.value,
+  async (val) => {
+    await nextTick()
+    windowResize()
+  },
+  { immediate: true }
+)
+
+onMounted(() => {
+  window.addEventListener('resize', windowResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', windowResize)
+})
 
 defineOptions({
   name: 'vk-layout'

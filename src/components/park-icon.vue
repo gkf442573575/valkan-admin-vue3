@@ -30,7 +30,7 @@ const iconName = computed(() => {
 })
 
 defineOptions({
-  name: 'pack-icon',
+  name: 'park-icon',
   components: {
     ...ParkIcons
   }
