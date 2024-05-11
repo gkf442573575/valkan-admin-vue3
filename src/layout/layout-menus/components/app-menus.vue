@@ -1,14 +1,16 @@
 <template>
-  <el-menu
-    class="app-menus"
-    popper-class="layout-menus-popper"
-    :default-active="active"
-    :mode="mode"
-    :collapse="collapse"
-    @select="select"
-  >
-    <SubMenu :menus-tree="menusTree" />
-  </el-menu>
+  <div class="vk-app-menus no-scrollbar">
+    <el-menu
+      class="vk-menus"
+      popper-class="layout-menus-popper"
+      :default-active="active"
+      :mode="mode"
+      :collapse="collapse"
+      @select="select"
+    >
+      <SubMenu :menus-tree="menusTree" />
+    </el-menu>
+  </div>
 </template>
 
 <script setup lang="ts">

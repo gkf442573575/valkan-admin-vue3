@@ -43,7 +43,12 @@ const NEW_MENUS: NewMenuItem[] = [
     path: '/system',
     parentId: '#',
     title: '系统设置',
-    children: [{ path: '/system/account', title: '账号管理', isSub: false }]
+    children: [
+      {
+        path: '/system/account',
+        title: '账号管理'
+      }
+    ]
   }
 ]
 

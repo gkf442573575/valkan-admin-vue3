@@ -1,7 +1,7 @@
 <template>
   <div class="vk-layout-header flex_align_center">
     <h2 class="vk-app-title">{{ appTitle }}</h2>
-    <div class="vk-layout-menus"></div>
+    <div class="vk-layout-menus__header"></div>
     <!-- 是否展示tab -->
     <LayoutTab />
     <!-- 是否布局类型 -->

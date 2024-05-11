@@ -1,24 +1,20 @@
 <template>
   <div :class="['vk-layout-menus default', isCollapse ? 'collapse' : '']">
-    <div class="vk-app-menus"></div>
+    <AppMenus :collapse="isCollapse" :menus-tree="appMenusTree" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import { useLayoutStore } from '@/stores/layout'
+import { useAuthStore } from '@/stores/auth'
 
-const layoutStore = useLayoutStore()
+import AppMenus from './components/app-menus.vue'
 
-const isCollapse = computed({
-  get() {
-    return layoutStore.isCollapse
-  },
-  set(val) {
-    layoutStore.changeCollapse(val)
-  }
-})
+const { isCollapse } = storeToRefs(useLayoutStore())
+
+const { appMenusTree } = storeToRefs(useAuthStore())
 
 defineOptions({
   name: 'vk-layout-menus__default'
