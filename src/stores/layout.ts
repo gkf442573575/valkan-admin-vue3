@@ -10,7 +10,7 @@ import { useAuthStore } from './auth'
 export const LAYOUT_KEY = `LAYOUT_KEY_${import.meta.env.VITE_APP_CODE}`
 
 interface LoaclLayout {
-  layout: string
+  layout: 'default' | 'subaside' | 'menuhead'
   visibleTabs: boolean
 }
 

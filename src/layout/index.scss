@@ -32,6 +32,7 @@ $menus-sub-w: 181;
   }
   .vk-layout-menus__header {
     flex: 1;
+    padding: 0 15px;
   }
   & &__icons {
     width: 40px;
@@ -55,8 +56,6 @@ $menus-sub-w: 181;
 .vk-layout-main {
   height: calc(100% - #{$layout-header-h}px);
   position: relative;
-  &.default {
-  }
 }
 
 .vk-layout-menus {
@@ -65,12 +64,35 @@ $menus-sub-w: 181;
   flex-direction: column;
   background-color: var(--el-menu-bg-color);
   border-right: var(--el-border);
-  overflow: hidden;
   position: absolute;
   left: 0;
   top: 0;
   z-index: 10;
   @extend .layout-transition;
+  .vk-layout-menus__box {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  .vk-collapse-icon {
+    position: absolute;
+    top: 35%;
+    right: 0px;
+    width: 30px;
+    height: 30px;
+    border: var(--el-border);
+    border-radius: 50%;
+    margin-right: -15px;
+    background-color: var(--el-bg-color);
+    cursor: pointer;
+    @extend .layout-transition;
+    &.expand {
+      transform: rotate(0deg);
+    }
+    &.collapse {
+      transform: rotate(-180deg);
+    }
+  }
   &.default {
     width: #{$menus-default-w}px;
     &.collapse {
@@ -84,6 +106,7 @@ $menus-sub-w: 181;
   }
   .vk-app-menus {
     height: 100%;
+    overflow-x: hidden;
     overflow-y: auto;
   }
 }
@@ -119,7 +142,7 @@ $menus-sub-w: 181;
     }
   }
   .vk-layout-views {
-    padding: 15px;
+    padding: 15px 20px;
     height: 100%;
     overflow: hidden;
   }
