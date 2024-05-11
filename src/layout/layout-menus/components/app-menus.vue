@@ -2,7 +2,7 @@
   <div class="vk-app-menus no-scrollbar">
     <el-menu
       class="vk-menus"
-      popper-class="layout-menus-popper"
+      popper-class="vk-menus-popper"
       :default-active="active"
       :mode="mode"
       :collapse="collapse"
