@@ -17,6 +17,13 @@ export const nextLevelColor = (color: string, level: number, isDark: boolean): s
     ElMessage.warning('输入错误的hex颜色值')
     return color
   }
+  const rgb = Color(color).rgb().array()
   level = level / 10
-  return isDark ? Color(color).darken(level).hex() : Color(color).lighten(level).hex()
+  for (let i = 0; i < 3; i++) {
+    const base =  isDark ? 20.5 : 255
+    rgb[i] = Math.round(base * level + rgb[i] * (1 - level))
+  }
+  return Color(rgb).hex()
+  // 使用color变得颜色偏深或者偏浅
+  // return isDark ? Color(color).darken(level).hex() : Color(color).lighten(level).hex()
 }

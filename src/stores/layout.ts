@@ -32,7 +32,7 @@ interface TabItem {
  * @desc 布局的store
  */
 export const useLayoutStore = defineStore('vk-layout', () => {
-  const layout = ref('default')
+  const layout = ref('subaside')
   // 是否折叠
   const isCollapse = ref(false)
   // 中间区域视图高度

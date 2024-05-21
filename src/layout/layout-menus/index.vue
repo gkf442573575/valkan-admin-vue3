@@ -6,6 +6,7 @@
 import { computed } from 'vue'
 
 import MenusDefault from './menus-default.vue'
+import MenusSubaside from './menus-subaside.vue'
 
 const props = defineProps({
   layout: {
@@ -19,7 +20,8 @@ const menusType = computed(() => `vk-layout-menus__${props.layout}`)
 defineOptions({
   name: 'vk-layout-menus',
   components: {
-    [MenusDefault.name as string]: MenusDefault
+    [MenusDefault.name as string]: MenusDefault,
+    [MenusSubaside.name as string]: MenusSubaside
   }
 })
 </script>

@@ -13,6 +13,9 @@ $menus-main-w: 81;
 /* 二级主题子侧边栏宽度 */
 $menus-sub-w: 181;
 
+/* 二级主题子侧边栏 */
+$menus-sub-w_collapse: 65;
+
 .layout-transition {
   transform-origin: center center;
   transition: all 0.3s var(--el-transition-function-ease-in-out-bezier);
@@ -99,6 +102,59 @@ $menus-sub-w: 181;
       width: #{$menus-default-w_collapse}px;
     }
   }
+  &.subaside {
+    width: #{$menus-main-w + $menus-sub-w}px;
+    .vk-menus-main {
+      width: #{$menus-main-w}px;
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      border-right: var(--el-border);
+      float: left;
+      padding: 10px;
+      > li {
+        width: 100%;
+        height: 60px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        padding: 5px 0;
+        &.active {
+          background-color: var(--el-color-primary-light-9);
+        }
+        &.active,
+        &:hover {
+          .el-icon,
+          .vk-menus-main_label {
+            color: var(--el-color-primary)
+          }
+        }
+        .el-icon {
+          width: 100%;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .vk-menus-main_label {
+          height: 20px;
+          line-height: 20px;
+          font-size: 12px;
+          text-align: center;
+        }
+      }
+    }
+    &.collapse {
+      width: #{$menus-main-w + $menus-sub-w_collapse}px;
+    }
+    // 无子菜单时
+    &.no-subaside {
+      width: #{$menus-main-w}px;
+      &.collapse {
+        width: #{$menus-main-w}px;
+      }
+    }
+  }
   .el-menu.vk-menus {
     width: 100%;
     border-right: none;
@@ -139,6 +195,12 @@ $menus-sub-w: 181;
     padding-left: #{$menus-default-w}px;
     &.collapse {
       padding-left: #{$menus-default-w_collapse}px;
+    }
+  }
+  &.subaside {
+    padding-left: #{$menus-main-w + $menus-sub-w}px;
+    &.collapse {
+      padding-left: #{$menus-main-w + $menus-sub-w_collapse}px;
     }
   }
   .vk-layout-views {
