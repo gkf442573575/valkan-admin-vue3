@@ -8,6 +8,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 
 import { envParse } from 'vite-plugin-env-parse'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -25,6 +26,18 @@ export default defineConfig(({ mode }) => {
         iconDirs: [resolve(process.cwd(), 'src/assets/svgs')],
         // 指定symbolId格式
         symbolId: 'svg-icon-[name]'
+      }),
+      viteStaticCopy({
+        // 从node_modules里面copy出去 优化掉css，css 体量减小
+        targets: [
+          {
+            src: [
+              'node_modules/element-plus/dist/index.css',
+              'node_modules/element-plus/theme-chalk/dark/css-vars.css'
+            ],
+            dest: 'libs/element-plus'
+          }
+        ]
       })
     ],
     build: {
@@ -35,7 +48,8 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             vueVendor: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
             iconPark: ['@icon-park/vue-next'],
-            elementPlus: ['element-plus', '@element-plus/icons-vue'],
+            elementPlus: ['element-plus'],
+            elementIcon: ['@element-plus/icons-vue'],
             vendor: ['qs', 'dayjs', 'lodash', 'class-validator', 'crypto-js', 'js-cookie', 'color'],
             lottieVendor: ['lottie-web', 'lottie-palette']
           }
