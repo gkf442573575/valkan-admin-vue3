@@ -24,6 +24,7 @@
     "lodash": "^4.17.21",
     "lottie-palette": "^0.0.6",
     "lottie-web": "^5.12.2",
+    "mitt": "^3.0.1",
     "nprogress": "^0.2.0",
     "pinia": "^2.2.2",
     "qs": "^6.12.1",

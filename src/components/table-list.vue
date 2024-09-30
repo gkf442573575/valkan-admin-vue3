@@ -69,7 +69,7 @@
 import { ref, type PropType, computed, watch, nextTick } from 'vue'
 import { type ElTable } from 'element-plus'
 
-import type { TableColItem } from '@/types/index'
+import type { TableColItem } from '@/interfaces/index'
 
 interface ROWITEM {
   [key: string]: any

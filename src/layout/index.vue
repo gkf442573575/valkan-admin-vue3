@@ -2,13 +2,13 @@
   <div class="vk-layout w_10_h_10">
     <LayoutHeader />
     <div :class="['vk-layout-main', layout]">
-      <LayoutMenus v-if="layout !== 'menuhead'" :layout="layout" />
+      <LayoutMenus v-if="layout !== 'menuhead'" :layout="layout"/>
       <div
         :class="[
           'vk-layout-body',
           layout,
           isCollapse ? 'collapse' : '',
-          visibleTabs ? 'visible-tabs' : ''
+          visibleTabs ? 'visible-tabs' : '',
         ]"
       >
         <LayoutTabs v-show="visibleTabs" />

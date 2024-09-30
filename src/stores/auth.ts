@@ -1,11 +1,12 @@
-import type { LoginForm, UserInfo, AppMenuItem, MenusTree } from '@/types/index'
+import type { LoginForm, UserInfo, AppMenuItem, MenusTree } from '@/interfaces/index'
 
 import { defineStore } from 'pinia'
 import jsCookie from 'js-cookie'
 
 import { TOKEN_EXPIRE } from '@/config/index'
 
-import { createAppMenus, createMenusTree } from '@/router/router-tool'
+import { createAppMenus, createMenusTree, removeMenusRoutes } from '@/router/router-tool'
+import router from '@/router'
 
 import { mockLogin, mockUserInfo, mockUserMenus } from '@/mock/user'
 
@@ -26,7 +27,7 @@ export const useAuthStore = defineStore('vk-auth', {
     user: null,
     appMenus: [],
     appMenusTree: [],
-    hasAddRoutes: false
+    hasAddRoutes: false // 是否创建路由, 登出的时候，设置为false
   }),
   actions: {
     setAddStatus(hasAdd: boolean) {
@@ -63,6 +64,20 @@ export const useAuthStore = defineStore('vk-auth', {
         } catch (error) {
           reject(error)
         }
+      })
+    },
+    loginOut() {
+      this.setToken('')
+      jsCookie.remove(TOKEN_KEY)
+      removeMenusRoutes(this.appMenus, router)
+      this.user = null
+      this.hasAddRoutes = false
+      this.appMenus = []
+      this.appMenusTree = []
+      // 调整到登录页
+      router.push({
+        path: '/login',
+        replace: true
       })
     },
     // 获取用户信息

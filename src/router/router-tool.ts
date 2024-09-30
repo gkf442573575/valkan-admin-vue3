@@ -1,5 +1,5 @@
 import type { Router } from 'vue-router'
-import type { MenuItem, AppMenuItem, MenusTree, BaseMenuItem } from '@/types/index'
+import type { MenuItem, AppMenuItem, MenusTree, BaseMenuItem } from '@/interfaces/index'
 
 import { v4 as uuidv4 } from 'uuid'
 import { isNotEmpty } from 'class-validator'
@@ -92,6 +92,7 @@ const getComByPath = (path: string) => {
   return findCom
 }
 
+// 修改主路由
 const changeMainPath = (item: BaseMenuItem, childs: BaseMenuItem[]) => {
   let path = item.path
   if (!childs.length && path === '#') {
@@ -251,4 +252,18 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
     }
   }
   dts(menusTree)
+}
+
+/**
+ * @desc 删除路由
+ * @param router
+ */
+export const removeMenusRoutes = (menus: AppMenuItem[], router: Router) => {
+  const routers = router.getRoutes()
+  routers.forEach((route) => {
+    const findItem = menus.find((item) => item.name === route.name)
+    if (findItem && route.name) {
+      router.removeRoute(route.name)
+    }
+  })
 }

@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MenusTree } from '@/types/index'
+import type { MenusTree } from '@/interfaces/index'
 
 import { type PropType } from 'vue'
 

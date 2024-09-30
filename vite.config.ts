@@ -16,6 +16,13 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: env.VITE_APP_BASE_PATH,
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler' // modern
+        }
+      }
+    },
     plugins: [
       vue(),
       vueJsx(),

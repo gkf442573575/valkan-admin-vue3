@@ -1,4 +1,4 @@
-import type { LoginForm, UserInfo, MenuItem } from '@/types/index'
+import type { LoginForm, UserInfo, MenuItem } from '@/interfaces/index'
 import type { MockResData } from './index'
 
 import { MD5, enc, AES } from 'crypto-js'

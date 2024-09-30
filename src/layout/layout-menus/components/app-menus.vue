@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MenusTree } from '@/types/index'
+import type { MenusTree } from '@/interfaces/index'
 import { ref, watch, type PropType } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'

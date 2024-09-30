@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
-import type { LoginForm } from '@/types/index'
+import type { LoginForm } from '@/interfaces/index'
 
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'

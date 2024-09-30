@@ -9,7 +9,7 @@
           <div class="action">修改密码</div>
         </li>
         <li class="vk-avatar-action_item">
-          <div class="action" @click="loginOut">退出登录</div>
+          <div class="action" @click="authStore.loginOut()">退出登录</div>
         </li>
       </ul>
     </template>
@@ -26,9 +26,6 @@ const authStore = useAuthStore()
 const userName = computed(
   () => authStore.user && authStore.user.username && authStore.user.username[0]
 )
-
-// 退出登录
-const loginOut = () => {}
 
 defineOptions({
   name: 'vk-header-avatar'
