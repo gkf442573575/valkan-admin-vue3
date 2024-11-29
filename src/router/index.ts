@@ -37,6 +37,9 @@ const router = createRouter({
   routes
 })
 
+// 是否已经创建
+let hasCreated = false
+
 router.beforeEach(async (to, from, next) => {
   NProgress.start()
   document.title = to.meta.title
@@ -45,6 +48,7 @@ router.beforeEach(async (to, from, next) => {
 
   const authStore = useAuthStore()
   const token = authStore.getToken()
+  await authStore.getUserInfo()
   if (token) {
     if (to.name === 'Login') {
       next({
@@ -53,24 +57,27 @@ router.beforeEach(async (to, from, next) => {
       })
       return
     }
-    const hasAddRoutes = authStore.hasAddRoutes
+
     // TODO:是否创建路由, 登出的时候，设置为false
-    if (!hasAddRoutes) {
-      await authStore.getUserInfo()
+    if (hasCreated) {
+      next()
+    } else {
       const appMenusTree = await authStore.getUserMenus()
       createAppRoutes(appMenusTree, router)
-      authStore.setAddStatus(true)
+
       // 添加404错误路由
       router.addRoute(err404Route)
       // 跳转
       next({ ...to, replace: true })
-    } else {
-      next()
     }
   } else {
     if (to.name === 'Login') {
       next()
     } else {
+      // 清空路由
+      hasCreated = false
+      const dynamicRoutes = router.getRoutes().filter((item) => item.meta && item.meta.dynamic)
+      dynamicRoutes.forEach((item) => router.removeRoute(item.name as string))
       next({
         path: '/login',
         replace: true,

@@ -85,6 +85,7 @@ export const useAuthStore = defineStore('vk-auth', {
       return new Promise<UserInfo>(async (resolve, reject) => {
         try {
           if (!this.token) {
+            this.user = null
             throw new Error('token不存在')
           }
           if (this.user) {

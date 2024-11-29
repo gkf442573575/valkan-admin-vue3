@@ -10,6 +10,7 @@ import '@icon-park/vue-next/styles/index.css'
 
 import './styles/main.scss'
 import './styles/mixins.scss'
+import './styles/tailwind.scss'
 
 import App from './App.vue'
 import router from './router'
@@ -19,7 +20,9 @@ import 'virtual:svg-icons-register'
 // global component
 import SvgIcon from './components/svg-icon.vue'
 import ParkIcon from './components/park-icon.vue'
-import TableList from './components/table-list.vue'
+
+import TableList from './components/table-list'
+import SearchHeader from './components/search-header'
 
 const app = createApp(App)
 
@@ -32,6 +35,8 @@ app.use(ElementPlus, {
 
 app.component(SvgIcon.name || 'svg-icon', SvgIcon)
 app.component(ParkIcon.name || 'park-icon', ParkIcon)
-app.component(TableList.name || 'vk-table-list', TableList)
+
+app.use(TableList)
+app.use(SearchHeader)
 
 app.mount('#app')

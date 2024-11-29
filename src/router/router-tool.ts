@@ -215,7 +215,10 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
     component: Layout,
     redirect: menusTree[0].path,
     name: 'VKLayout',
-    children: []
+    children: [],
+    meta: {
+      dynamic: true
+    }
   })
   const dts = (list: MenusTree[], parentName: string = 'VKLayout') => {
     for (let i = 0; i < list.length; i++) {
@@ -226,7 +229,8 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
         title: item.title,
         icon: item.icon,
         isMain: item.isMain,
-        isSub: item.isSub
+        isSub: item.isSub,
+        dynamic: true
       }
       if (children.length) {
         router.addRoute(parentName, {

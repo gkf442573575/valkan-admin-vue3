@@ -16,13 +16,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: env.VITE_APP_BASE_PATH,
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler' // modern
-        }
-      }
-    },
     plugins: [
       vue(),
       vueJsx(),
@@ -48,7 +41,7 @@ export default defineConfig(({ mode }) => {
       })
     ],
     build: {
-      assetsDir: 'static',
+      assetsDir: 'sources',
       chunkSizeWarningLimit: 3072,
       rollupOptions: {
         output: {
@@ -67,6 +60,13 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
-    }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler' // modern
+        }
+      }
+    },
   }
 })

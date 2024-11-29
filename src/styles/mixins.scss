@@ -17,38 +17,21 @@
 }
 
 .pretty-bar {
-  // 滚动条整体
-  &::-webkit-scrollbar {
-    z-index: 50;
-    width: 10px;
-    height: 3px;
-    background: #b8b8b8;
-  }
-  // 滚动条滑道
   &::-webkit-scrollbar-track {
-    background-color: #b8b8b8;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #fdfdfd;
   }
-  // 滚动滑块样式
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: #ffffff;
+  }
+
   &::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    background-color: #b6b6b6;
-    transition: all 0.2s;
-    height: 10px;
-    border: 1px solid #b6b6b6;
-  }
-  // 滚动条的样式，是可以跟 :hover 伪类叠加使用的
-  // 滚动条鼠标悬浮时的样式
-  &:hover::-webkit-scrollbar-thumb {
-    transition: all 0.2s;
-  }
-  // 滚动条上下的箭头按钮
-  &::-webkit-scrollbar-button {
-    display: none;
-  }
-  &::-webkit-scrollbar-corner {
-    display: none;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #a7a7a7;
   }
 }
 
@@ -57,37 +40,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-// 宽度100% 高度100%
-.w_10_h_10 {
-  width: 100%;
-  height: 100%;
-}
-// 宽度100% 高度50%
-.w_10_h_5 {
-  width: 100%;
-  height: 50%;
-}
-// 宽度50% 高度100%
-.w_5_h_10 {
-  width: 50%;
-  height: 100%;
-}
-// flex居中
-.flex_align_center {
-  display: flex;
-  align-items: center;
-}
-// flex居中
-.flex_justify_center {
-  display: flex;
-  justify-content: center;
-}
-// 居中
-.postiopn_center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
