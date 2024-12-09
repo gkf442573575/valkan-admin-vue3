@@ -209,6 +209,7 @@ export const createMenusTree = (menus: AppMenuItem[], parentId: string = '#') =>
  * @param router
  */
 export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
+
   // 先创建layout的根路由
   router.addRoute({
     path: '/',
@@ -220,12 +221,13 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
       dynamic: true
     }
   })
-  const dts = (list: MenusTree[], parentName: string = 'VKLayout') => {
+  const dts = (list: MenusTree[], parentName: string = 'VKLayout', parentId: string = '#') => {
     for (let i = 0; i < list.length; i++) {
       const item = list[i]
       const children = item.children || []
       const meta = {
         id: item.id,
+        parentId,
         title: item.title,
         icon: item.icon,
         isMain: item.isMain,
@@ -240,7 +242,7 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
           meta
         })
         // 递归，创建子路由
-        dts(children, item.name)
+        dts(children, item.name, item.id)
       } else {
         const currentComponent = getComByPath(item.path)
         if (!currentComponent) {

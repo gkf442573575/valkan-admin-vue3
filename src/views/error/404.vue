@@ -1,9 +1,8 @@
 <template>
   <div
-    class="w_10_h_10 flex_align_center flex_justify_center"
-    style="overflow: hidden; flex-direction: column"
+    class="w-full h-full flex flex-col items-center justify-center overflow-hidden"
   >
-    <div id="error-404" ref="error404Ref" class="lottie-error"></div>
+    <div id="error-404" ref="error404Ref" class="w-[600px] mb-10"></div>
     <el-button type="primary" round @click="backHome">返回首页</el-button>
   </div>
 </template>
@@ -71,9 +70,3 @@ defineOptions({
 })
 </script>
 
-<style lang="scss" scoped>
-.lottie-error {
-  width: 600px;
-  margin-bottom: 40px;
-}
-</style>

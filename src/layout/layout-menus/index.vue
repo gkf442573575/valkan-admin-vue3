@@ -1,5 +1,10 @@
 <template>
-  <component :is="menusType" :is-collapse="isCollapse" @collapse="emits('collapse')"></component>
+  <component
+    :is="menusType"
+    :is-fold="isFold"
+    @fold="emits('fold')"
+    @subaside-change="(hasSubAside: boolean) => emits('subaside-change', hasSubAside)"
+  ></component>
 </template>
 
 <script setup lang="ts">
@@ -13,14 +18,15 @@ const props = defineProps({
     type: String,
     default: 'default'
   },
-  isCollapse: {
+  isFold: {
     type: Boolean,
     default: false
   }
 })
 
 const emits = defineEmits<{
-  (e: 'collapse'): void
+  (e: 'fold'): void
+  (e: 'subaside-change', hasSubAside: boolean): void
 }>()
 
 const menusType = computed(() => `vk-layout-menus__${props.layout}`)

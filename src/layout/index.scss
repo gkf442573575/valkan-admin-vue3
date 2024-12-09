@@ -8,7 +8,7 @@ $menus-default-w: 201;
 $menus-default-w_collapse: 65;
 
 /* 二级主题主侧边栏宽度 */
-$menus-main-w: 81;
+$menus-main-w: 91;
 
 /* 二级主题子侧边栏宽度 */
 $menus-sub-w: 181;
@@ -21,7 +21,6 @@ $menus-sub-w_collapse: 65;
   transition: all 0.3s var(--el-transition-function-ease-in-out-bezier);
 }
 
-
 .vk-layout {
   & &-header {
     height: #{$layout-header-h}px;
@@ -29,152 +28,225 @@ $menus-sub-w_collapse: 65;
   & &-main {
     height: calc(100% - #{$layout-header-h}px);
   }
-}
 
+  & &-body {
+    @apply h-full;
+    &.default {
+      padding-left: #{$menus-default-w}px;
+      &.fold {
+        padding-left: #{$menus-default-w_collapse}px;
+      }
+    }
+    &.menuhead {
+      padding-left: 0;
+    }
+    &.subaside {
+      padding-left: #{$menus-main-w + $menus-sub-w}px;
+      &.fold {
+        padding-left: #{$menus-main-w + $menus-sub-w_collapse}px;
+      }
+      &.no-subaside {
+        padding-left: #{$menus-main-w}px;
+      }
+    }
+  }
 
-.vk-layout-menus {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--el-menu-bg-color);
-  border-right: var(--el-border);
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 10;
-  @extend .layout-transition;
-  .vk-layout-menus__box {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  & &-menus {
+    @apply h-full bg-[var(--el-menu-bg-color)] absolute left-0 top-0 z-50 border-r border-r-el;
+    @extend .layout-transition;
+    &.default {
+      width: #{$menus-default-w}px;
+      &.fold {
+        width: #{$menus-default-w_collapse}px;
+      }
+    }
+    &.subaside {
+      width: #{$menus-main-w + $menus-sub-w}px;
+      .vk-menus-subaside {
+        width: #{$menus-sub-w - 1}px;
+      }
+      &.fold {
+        width: #{$menus-main-w + $menus-sub-w_collapse}px;
+        .vk-menus-subaside {
+          width: #{$menus-sub-w_collapse - 1}px;
+        }
+      }
+      &.no-subaside {
+        width: #{$menus-main-w}px;
+        &.fold {
+          width: #{$menus-main-w}px;
+        }
+      }
+      .vk-menus-main {
+        width: #{$menus-main-w}px;
+      }
+
+    }
   }
   .vk-collapse-icon {
-    position: absolute;
-    top: 35%;
-    right: 0px;
-    width: 30px;
-    height: 30px;
-    border: var(--el-border);
-    border-radius: 50%;
-    margin-right: -15px;
-    background-color: var(--el-bg-color);
-    cursor: pointer;
+    @apply absolute w-[30px] h-[30px] top-1/3 right-0 border-el border rounded-full -mr-[15px] bg-el cursor-pointer z-[100];
     @extend .layout-transition;
+    &.fold {
+      transform: rotate(-180deg);
+    }
     &.expand {
       transform: rotate(0deg);
     }
-    &.collapse {
-      transform: rotate(-180deg);
-    }
   }
-  &.default {
-    width: #{$menus-default-w}px;
-    &.collapse {
-      width: #{$menus-default-w_collapse}px;
-    }
-  }
-  &.subaside {
-    width: #{$menus-main-w + $menus-sub-w}px;
-    .vk-menus-main {
-      width: #{$menus-main-w}px;
-      height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-      border-right: var(--el-border);
-      float: left;
-      padding: 10px;
-      > li {
-        width: 100%;
-        height: 60px;
-        border-radius: 4px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        padding: 5px 0;
-        &.active {
-          background-color: var(--el-color-primary-light-9);
-        }
-        &.active,
-        &:hover {
-          .el-icon,
-          .vk-menus-main_label {
-            color: var(--el-color-primary)
-          }
-        }
-        .el-icon {
-          width: 100%;
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .vk-menus-main_label {
-          height: 20px;
-          line-height: 20px;
-          font-size: 12px;
-          text-align: center;
-        }
-      }
-    }
-    &.collapse {
-      width: #{$menus-main-w + $menus-sub-w_collapse}px;
-    }
-    // 无子菜单时
-    &.no-subaside {
-      width: #{$menus-main-w}px;
-      &.collapse {
-        width: #{$menus-main-w}px;
-      }
-    }
-  }
-  .el-menu.vk-menus {
-    width: 100%;
-    border-right: none;
-    border-bottom: none;
-  }
+
   .vk-app-menus {
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
-
-.vk-menus-popper {
-  .el-menu-item {
-    &:hover {
-      background-color: transparent;
-      color: var(--el-color-primary);
-    }
-    .vk-menu-item {
-      width: 100%;
-      display: flex;
-      align-items: center;
+    .el-menu.vk-menus {
+      @apply border-r-0;
+      &.el-menu--horizontal {
+        @apply border-b-0;
+      }
     }
   }
 }
 
-.vk-layout-body {
-  @extend .layout-transition;
-  overflow: hidden;
-  &.visible-tabs {
-    .vk-layout-views {
-      height: calc(100% - 40px);
-    }
-  }
-  &.default {
-    padding-left: #{$menus-default-w}px;
-    &.collapse {
-      padding-left: #{$menus-default-w_collapse}px;
-    }
-  }
-  &.subaside {
-    padding-left: #{$menus-main-w + $menus-sub-w}px;
-    &.collapse {
-      padding-left: #{$menus-main-w + $menus-sub-w_collapse}px;
-    }
-  }
-}
+// .vk-layout-menus {
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   background-color: var(--el-menu-bg-color);
+//   border-right: var(--el-border);
+//   position: absolute;
+//   left: 0;
+//   top: 0;
+//   z-index: 10;
+//   @extend .layout-transition;
+//   .vk-layout-menus__box {
+//     width: 100%;
+//     height: 100%;
+//     position: relative;
+//   }
+//   .vk-collapse-icon {
+//     position: absolute;
+//     top: 35%;
+//     right: 0px;
+//     width: 30px;
+//     height: 30px;
+//     border: var(--el-border);
+//     border-radius: 50%;
+//     margin-right: -15px;
+//     background-color: var(--el-bg-color);
+//     cursor: pointer;
+//     @extend .layout-transition;
+//     &.expand {
+//       transform: rotate(0deg);
+//     }
+//     &.collapse {
+//       transform: rotate(-180deg);
+//     }
+//   }
+//   &.default {
+//     width: #{$menus-default-w}px;
+//     &.collapse {
+//       width: #{$menus-default-w_collapse}px;
+//     }
+//   }
+//   &.subaside {
+//     width: #{$menus-main-w + $menus-sub-w}px;
+//     .vk-menus-main {
+//       width: #{$menus-main-w}px;
+//       height: 100%;
+//       overflow-x: hidden;
+//       overflow-y: auto;
+//       border-right: var(--el-border);
+//       float: left;
+//       padding: 10px;
+//       > li {
+//         width: 100%;
+//         height: 60px;
+//         border-radius: 4px;
+//         margin-bottom: 10px;
+//         cursor: pointer;
+//         padding: 5px 0;
+//         &.active {
+//           background-color: var(--el-color-primary-light-9);
+//         }
+//         &.active,
+//         &:hover {
+//           .el-icon,
+//           .vk-menus-main_label {
+//             color: var(--el-color-primary)
+//           }
+//         }
+//         .el-icon {
+//           width: 100%;
+//           height: 30px;
+//           display: flex;
+//           align-items: center;
+//           justify-content: center;
+//         }
+//         .vk-menus-main_label {
+//           height: 20px;
+//           line-height: 20px;
+//           font-size: 12px;
+//           text-align: center;
+//         }
+//       }
+//     }
+//     &.collapse {
+//       width: #{$menus-main-w + $menus-sub-w_collapse}px;
+//     }
+//     // 无子菜单时
+//     &.no-subaside {
+//       width: #{$menus-main-w}px;
+//       &.collapse {
+//         width: #{$menus-main-w}px;
+//       }
+//     }
+//   }
+//   .el-menu.vk-menus {
+//     width: 100%;
+//     border-right: none;
+//     border-bottom: none;
+//   }
+//   .vk-app-menus {
+//     height: 100%;
+//     overflow-x: hidden;
+//     overflow-y: auto;
+//   }
+// }
 
-/* tabs */
+// .vk-menus-popper {
+//   .el-menu-item {
+//     &:hover {
+//       background-color: transparent;
+//       color: var(--el-color-primary);
+//     }
+//     .vk-menu-item {
+//       width: 100%;
+//       display: flex;
+//       align-items: center;
+//     }
+//   }
+// }
+
+// .vk-layout-body {
+//   @extend .layout-transition;
+//   overflow: hidden;
+//   &.visible-tabs {
+//     .vk-layout-views {
+//       height: calc(100% - 40px);
+//     }
+//   }
+//   &.default {
+//     padding-left: #{$menus-default-w}px;
+//     &.collapse {
+//       padding-left: #{$menus-default-w_collapse}px;
+//     }
+//   }
+//   &.subaside {
+//     padding-left: #{$menus-main-w + $menus-sub-w}px;
+//     &.collapse {
+//       padding-left: #{$menus-main-w + $menus-sub-w_collapse}px;
+//     }
+//   }
+// }
+
+// /* tabs */
 .vk-layout-tabs {
   .el-tabs {
     .el-tabs__header {

@@ -7,7 +7,7 @@
     <div class="vk-toggle-tab w-10 h-10 mr-3 flex items-center justify-center" @click="visibleTab = !visibleTab">
       <span
         class="relative inline-block w-[26px] h-[26px] cursor-pointer rounded-full bg-error shadow-[0_0_10px_0_var(--el-color-error-light-5)]"
-        :class="[visibleTab ? 'open' : '']"
+        :class="[visibleTab ? 'open bg-success shadow-[0_0_10px_0_var(--el-color-success-light-5)]' : '']"
       ></span>
     </div>
     <!--refresh 只有tab隐藏的时候显示-->
@@ -155,24 +155,13 @@ defineOptions({
 .vk-toggle-tab {
   span {
     &:before {
+      @apply w-4 h-1 rounded absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white;
       content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       transition: all 0.2s cubic-bezier(0, -1.85, 0.27, 1.75);
-      width: 16px;
-      height: 4px;
-      border-radius: 4px;
-      background-color: #fff;
     }
     &.open {
-      background-color: var(--el-color-success);
-      box-shadow: 0 0 10px 0 var(--el-color-success-light-5);
       &::before {
-        height: 16px;
-        border-radius: 50%;
-        background-color: var(--el-color-success);
+        @apply h-4 rounded-full bg-success;
         box-shadow: inset 0 0 0 2px #fff;
       }
     }

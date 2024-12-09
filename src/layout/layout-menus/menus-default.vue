@@ -1,10 +1,10 @@
 <template>
-  <div :class="['vk-layout-menus default', isCollapse ? 'collapse' : '']">
-    <div class="vk-layout-menus__box">
-      <AppMenus :collapse="isCollapse" :menus-tree="appMenusTree" />
+  <div :class="['vk-layout-menus default', isFold ? 'fold' : '']">
+    <div class="vk-layout-menus__box w-full h-full overflow-hidden">
+      <AppMenus class="w-full h-full overflow-y-auto" :collapse="isFold" :menus-tree="appMenusTree" />
       <el-icon
-        :class="['vk-collapse-icon', isCollapse ? 'collapse' : 'expand']"
-        @click="emits('collapse')"
+        :class="['vk-collapse-icon', isFold ? 'fold' : 'expand']"
+        @click="emits('fold')"
       >
         <ArrowRightBold />
       </el-icon>
@@ -22,11 +22,11 @@ import { useAuthStore } from '@/stores/auth'
 import AppMenus from './components/app-menus.vue'
 
 defineProps<{
-  isCollapse: boolean
+  isFold: boolean
 }>()
 
 const emits = defineEmits<{
-  (e: 'collapse'): void
+  (e: 'fold'): void
 }>()
 
 const { appMenusTree } = storeToRefs(useAuthStore())

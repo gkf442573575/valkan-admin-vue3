@@ -73,13 +73,15 @@ export const useThemeStore = defineStore('vk-theme', {
     // 初始化主题
     initTheme() {
       const storeTheme = storage.get(THEME_KEY)
-      const localTheme: LocalTheme = (storeTheme && JSON.parse(storeTheme)) || {
+      const localTheme: LocalTheme = storeTheme ? JSON.parse(storeTheme) : {
         primary: DEFAULT_PRIMARY,
         isDark: false,
-        layout: 'default'
+        layout: 'default',
       }
-      this.primary = localTheme.primary
-      this.isDark = localTheme.isDark
+
+      this.primary = localTheme.primary || DEFAULT_PRIMARY
+      this.isDark = localTheme.isDark || false
+      this.layout = localTheme.layout || 'default'
       this.switchDark(this.isDark)
     }
   }

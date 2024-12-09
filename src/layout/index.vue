@@ -5,14 +5,16 @@
       <LayoutMenus
         v-if="layout !== 'menuhead'"
         :layout="layout"
-        :is-collapse="isCollapse"
-        @collapse="isCollapse = !isCollapse"
+        :is-fold="isFold"
+        @fold="isFold = !isFold"
+        @subaside-change="subasideChange"
       />
       <div
         :class="[
           'vk-layout-body w-full h-full overflow-hidden',
           layout,
-          isCollapse ? 'collapse' : ''
+          isFold ? 'fold' : '',
+          hasSubAside? '': 'no-subaside'
         ]"
       >
         <LayoutTabs v-show="visibleTab" />
@@ -46,12 +48,18 @@ const themeStore = useThemeStore()
 
 const { layout } = storeToRefs(themeStore)
 
-// 是否
-const isCollapse = ref(false)
+// 是否 折叠菜单
+const isFold = ref(false)
+// 是否显示标签页
 const visibleTab = ref(true)
+const hasSubAside = ref(false)
 
 // 刷新页面
 const isShowRoute = ref(true)
+
+const subasideChange = (val: boolean) => {
+  hasSubAside.value = val
+}
 const refresh = (val: boolean) => (isShowRoute.value = val)
 provide('refresh', refresh)
 
