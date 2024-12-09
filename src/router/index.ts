@@ -58,12 +58,10 @@ router.beforeEach(async (to, from, next) => {
       })
       return
     }
-
     // TODO:是否创建路由, 登出的时候，设置为false
     if (hasCreated) {
       next()
     } else {
-
       const appMenusTree = await authStore.getUserMenus()
       console.log('appMenusTree >>>', appMenusTree)
       createAppRoutes(appMenusTree, router)

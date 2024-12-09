@@ -24,7 +24,7 @@
           <el-form-item prop="username">
             <el-input
               v-model="loginForm.username"
-              placeholder="请输入用户名"
+              placeholder="请输入用户名(admin/user)"
               size="large"
               clearable
               @keyup.enter="login"
@@ -37,7 +37,7 @@
           <el-form-item prop="password">
             <el-input
               v-model="loginForm.password"
-              placeholder="请输入用户密码"
+              placeholder="请输入用户密码(123456)"
               size="large"
               clearable
               show-password

@@ -40,8 +40,6 @@ import { ArrowRightBold } from '@element-plus/icons-vue'
 
 import { useAuthStore } from '@/stores/auth'
 
-import mitt from '@/utils/mitt-bus'
-
 import AppMenus from './components/app-menus.vue'
 
 defineProps<{
@@ -66,12 +64,9 @@ const mainMenus = computed(() => {
 })
 
 const mainChange = (item: MenusTree) => {
-  console.log('item >>>', item)
   router.push({
     path: item.path,
-    replace: true
   })
-  // mitt.emit('main-change', item?.children.length || 0)
 }
 
 watch(
@@ -84,7 +79,8 @@ watch(
     if (meta.parentId) {
       const find = appMenusTree.value.find((item) => item.id === meta.parentId)
       subMenus.value = (find && find.children) || []
-      console.log('subMenus >>>', subMenus.value.length)
+    } else {
+      subMenus.value = []
     }
   },
   {
