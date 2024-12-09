@@ -73,7 +73,7 @@ import type { LoginForm } from '@/interfaces'
 
 import { ElNotification, ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { MD5 } from 'crypto-js'
 
 import { User, Lock } from '@element-plus/icons-vue'
@@ -84,8 +84,6 @@ import { useAuthStore } from '@/stores/auth'
 const APP_TITLE = import.meta.env.VITE_APP_TITLE
 
 const $router = useRouter()
-const $route = useRoute()
-
 const authStore = useAuthStore()
 
 const loginFormRef = ref<FormInstance>()
@@ -107,7 +105,6 @@ const login = () => {
   }
   loginFormRef.value.validate(async (valid) => {
     if (!valid) return
-    // TODO: 登录逻辑
     isLoading.value = true
     try {
       await authStore.login({
@@ -122,9 +119,8 @@ const login = () => {
         type: 'success',
         duration: 2000
       })
-      const redirect = $route.query.redirect?.toString() || '/'
       $router.replace({
-        path: redirect,
+        path: '/',
         replace: true
       })
     } catch (error) {

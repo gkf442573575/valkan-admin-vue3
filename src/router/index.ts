@@ -48,7 +48,6 @@ router.beforeEach(async (to, from, next) => {
 
   const authStore = useAuthStore()
   const token = authStore.getToken()
-
   if (token) {
     await authStore.getUserInfo()
     if (to.name === 'Login') {
@@ -58,12 +57,10 @@ router.beforeEach(async (to, from, next) => {
       })
       return
     }
-    // TODO:是否创建路由, 登出的时候，设置为false
     if (hasCreated) {
       next()
     } else {
       const appMenusTree = await authStore.getUserMenus()
-      console.log('appMenusTree >>>', appMenusTree)
       createAppRoutes(appMenusTree, router)
       // 添加404错误路由
       router.addRoute(err404Route)
@@ -72,19 +69,16 @@ router.beforeEach(async (to, from, next) => {
       next({ ...to, replace: true })
     }
   } else {
+    // 清空路由
+    hasCreated = false
+    const dynamicRoutes = router.getRoutes().filter((item) => item.meta && item.meta.dynamic)
+    dynamicRoutes.forEach((item) => router.removeRoute(item.name as string))
     if (to.name === 'Login') {
       next()
     } else {
-      // 清空路由
-      hasCreated = false
-      const dynamicRoutes = router.getRoutes().filter((item) => item.meta && item.meta.dynamic)
-      dynamicRoutes.forEach((item) => router.removeRoute(item.name as string))
       next({
         path: '/login',
-        replace: true,
-        query: {
-          redirect: to.path
-        }
+        replace: true
       })
     }
   }

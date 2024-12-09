@@ -5,8 +5,7 @@ import jsCookie from 'js-cookie'
 
 import { TOKEN_EXPIRE } from '@/constants/index'
 
-import { createAppMenus, createMenusTree, removeMenusRoutes } from '@/router/router-tool'
-import router from '@/router'
+import { createAppMenus, createMenusTree } from '@/router/router-tool'
 
 import { mockLogin, mockUserInfo, mockUserMenus } from '@/mock/user'
 
@@ -15,7 +14,6 @@ export interface AuthState {
   user: UserInfo | null
   appMenus: AppMenuItem[]
   appMenusTree: MenusTree[]
-  hasAddRoutes: boolean
 }
 
 // token key
@@ -26,13 +24,9 @@ export const useAuthStore = defineStore('vk-auth', {
     token: '',
     user: null,
     appMenus: [],
-    appMenusTree: [],
-    hasAddRoutes: false // 是否创建路由, 登出的时候，设置为false
+    appMenusTree: []
   }),
   actions: {
-    setAddStatus(hasAdd: boolean) {
-      this.hasAddRoutes = hasAdd
-    },
     // 获取token
     getToken() {
       if (this.token) {
@@ -69,16 +63,11 @@ export const useAuthStore = defineStore('vk-auth', {
     loginOut() {
       this.setToken('')
       jsCookie.remove(TOKEN_KEY)
-      removeMenusRoutes(this.appMenus, router)
       this.user = null
-      this.hasAddRoutes = false
       this.appMenus = []
       this.appMenusTree = []
       // 调整到登录页
-      router.push({
-        path: '/login',
-        replace: true
-      })
+      window.location.reload()
     },
     // 获取用户信息
     getUserInfo() {

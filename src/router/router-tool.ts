@@ -217,9 +217,6 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
     redirect: menusTree[0].path,
     name: 'VKLayout',
     children: [],
-    meta: {
-      dynamic: true
-    }
   })
   const dts = (list: MenusTree[], parentName: string = 'VKLayout', parentId: string = '#') => {
     for (let i = 0; i < list.length; i++) {
@@ -260,16 +257,3 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
   dts(menusTree)
 }
 
-/**
- * @desc 删除路由
- * @param router
- */
-export const removeMenusRoutes = (menus: AppMenuItem[], router: Router) => {
-  const routers = router.getRoutes()
-  routers.forEach((route) => {
-    const findItem = menus.find((item) => item.name === route.name)
-    if (findItem && route.name) {
-      router.removeRoute(route.name)
-    }
-  })
-}
