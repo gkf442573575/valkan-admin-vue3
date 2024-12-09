@@ -9,7 +9,9 @@
     </el-sub-menu>
     <el-menu-item v-else :index="item.id">
       <el-icon><park-icon :icon="item.icon" :size="18"></park-icon></el-icon>
-      <span class="vk-menu-title">{{ item.title }}</span>
+      <template #title>
+        <span class="vk-menu-title" >{{ item.title }}</span>
+      </template>
     </el-menu-item>
   </template>
 </template>

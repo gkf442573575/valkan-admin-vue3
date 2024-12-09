@@ -1,6 +1,6 @@
 <template>
   <div :class="['vk-layout-menus default', isFold ? 'fold' : '']">
-    <div class="vk-layout-menus__box w-full h-full overflow-hidden">
+    <div class="vk-layout-menus__box w-full h-full overflow-y-hidden">
       <AppMenus class="w-full h-full overflow-y-auto" :collapse="isFold" :menus-tree="appMenusTree" />
       <el-icon
         :class="['vk-collapse-icon', isFold ? 'fold' : 'expand']"
