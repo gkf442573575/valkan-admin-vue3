@@ -1,5 +1,5 @@
 <template>
-  <el-breadcrumb class="vk-bread-crumb" :separator-icon="ArrowRight">
+  <el-breadcrumb class="layout-bread-crumb flex-1 pr-4" :separator-icon="ArrowRight">
     <el-breadcrumb-item v-for="item in breadList" :key="item.name" :to="{ path: item.path }">
       <park-icon :icon="item.icon" style="margin-right: 4px"></park-icon>
       {{ item.title }}
@@ -13,7 +13,7 @@ import type { RouteLocationMatched } from 'vue-router'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { ArrowRight } from '@element-plus/icons-vue'
+import { ArrowRight, Refresh } from '@element-plus/icons-vue'
 
 interface BreadItem {
   title: string
@@ -40,7 +40,7 @@ const createBreadList = (matchArr: RouteLocationMatched[]) => {
       title: meta && meta.title ? String(meta.title) : '',
       icon: meta && meta.icon ? String(meta.icon) : '',
       name: name?.toString() || '',
-      path
+      path,
     }
     if (!len) {
       newBreadList.push(breadItem)
@@ -64,21 +64,17 @@ watch(
   },
   {
     deep: true,
-    immediate: true
-  }
+    immediate: true,
+  },
 )
 
 defineOptions({
-  name: 'vk-bread-crumb'
+  name: 'BreadCrumb',
 })
 </script>
 
 <style lang="scss" scoped>
-.vk-bread-crumb {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.layout-bread-crumb {
   &:deep(.el-breadcrumb__item) {
     .el-breadcrumb__inner {
       cursor: pointer;

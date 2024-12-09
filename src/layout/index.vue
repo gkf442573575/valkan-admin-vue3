@@ -1,5 +1,5 @@
 <template>
-  <div class="vk-layout w_10_h_10">
+  <div class="vk-layout w-full h-full">
     <LayoutHeader />
     <div :class="['vk-layout-main', layout]">
       <LayoutMenus v-if="layout !== 'menuhead'" :layout="layout"/>
@@ -32,7 +32,7 @@ import { storeToRefs } from 'pinia'
 
 import { useLayoutStore, useKeepAliveStore } from '@/stores/layout'
 
-import LayoutHeader from './layout-header/index.vue'
+import LayoutHeader from './layout-header.vue'
 import LayoutMenus from './layout-menus/index.vue'
 import LayoutTabs from './layout-tabs/index.vue'
 

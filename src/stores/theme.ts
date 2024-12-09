@@ -1,8 +1,10 @@
+import type { LATYOUT_TYPE } from '@/interfaces'
+
 import { defineStore } from 'pinia'
 
 import storage from '@/utils/storage'
 import { nextLevelColor } from '@/utils/theme-tool'
-import { DEFAULT_PRIMARY } from '@/config/index'
+import { DEFAULT_PRIMARY } from '@/constants/index'
 
 const THEME_KEY = `THEME_CONFIG_${import.meta.env.VITE_APP_CODE}`
 
@@ -11,6 +13,7 @@ export interface LocalTheme {
   isDark: boolean // 是否暗黑主题
   primaryList: string[] // 主题颜色列表
   primaryDark2: string // 主题颜色的dark2
+  layout: LATYOUT_TYPE
 }
 
 export const useThemeStore = defineStore('vk-theme', {
@@ -19,10 +22,23 @@ export const useThemeStore = defineStore('vk-theme', {
       isDark: false,
       primary: DEFAULT_PRIMARY,
       primaryList: [],
-      primaryDark2: ''
+      primaryDark2: '',
+      layout: 'default'
     }
   },
   actions: {
+    storeLayout() {
+      storage.set(THEME_KEY, {
+        primary: this.primary,
+        isDark: this.isDark,
+        layout: this.layout
+      })
+    },
+    // 切换布局
+    switchLayout(layout: LATYOUT_TYPE) {
+      this.layout = layout
+      this.storeLayout()
+    },
     // 切换dark/light模式
     switchDark(isDark: boolean) {
       this.isDark = isDark
@@ -52,17 +68,15 @@ export const useThemeStore = defineStore('vk-theme', {
       }
       // 设置参数
       this.primary = val
-      storage.set(THEME_KEY, {
-        primary: val,
-        isDark: this.isDark
-      })
+      this.storeLayout()
     },
     // 初始化主题
     initTheme() {
       const storeTheme = storage.get(THEME_KEY)
       const localTheme: LocalTheme = (storeTheme && JSON.parse(storeTheme)) || {
         primary: DEFAULT_PRIMARY,
-        isDark: false
+        isDark: false,
+        layout: 'default'
       }
       this.primary = localTheme.primary
       this.isDark = localTheme.isDark

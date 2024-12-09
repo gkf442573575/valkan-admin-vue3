@@ -3,7 +3,7 @@ import type { LoginForm, UserInfo, AppMenuItem, MenusTree } from '@/interfaces/i
 import { defineStore } from 'pinia'
 import jsCookie from 'js-cookie'
 
-import { TOKEN_EXPIRE } from '@/config/index'
+import { TOKEN_EXPIRE } from '@/constants/index'
 
 import { createAppMenus, createMenusTree, removeMenusRoutes } from '@/router/router-tool'
 import router from '@/router'

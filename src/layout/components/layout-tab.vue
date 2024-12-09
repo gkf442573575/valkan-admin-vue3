@@ -25,7 +25,6 @@ defineOptions({
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 5px;
   .toggle {
     position: relative;
     display: inline-block;

@@ -48,8 +48,9 @@ router.beforeEach(async (to, from, next) => {
 
   const authStore = useAuthStore()
   const token = authStore.getToken()
-  await authStore.getUserInfo()
+
   if (token) {
+    await authStore.getUserInfo()
     if (to.name === 'Login') {
       next({
         path: '/',
@@ -62,11 +63,13 @@ router.beforeEach(async (to, from, next) => {
     if (hasCreated) {
       next()
     } else {
-      const appMenusTree = await authStore.getUserMenus()
-      createAppRoutes(appMenusTree, router)
 
+      const appMenusTree = await authStore.getUserMenus()
+      console.log('appMenusTree >>>', appMenusTree)
+      createAppRoutes(appMenusTree, router)
       // 添加404错误路由
       router.addRoute(err404Route)
+      hasCreated = true
       // 跳转
       next({ ...to, replace: true })
     }

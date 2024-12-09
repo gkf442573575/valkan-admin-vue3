@@ -10,13 +10,13 @@ const props = defineProps({
   name: {
     // 自定义svg的name属性
     type: String,
-    required: true
+    required: true,
   },
   color: {
     // 自定义svg的color属性
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const svgHref = computed(() => `#svg-icon-${props.name}`)
@@ -29,13 +29,6 @@ const svgClass = computed(() => {
 })
 
 defineOptions({
-  name: 'svg-icon'
+  name: 'svg-icon',
 })
 </script>
-
-<style lang="scss" scoped>
-.svg-icon {
-  width: 1.6em;
-  height: 1.6em;
-}
-</style>
