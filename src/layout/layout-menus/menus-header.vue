@@ -8,14 +8,14 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
-import { useLayoutStore } from '@/stores/layout'
+import { useThemeStore } from '@/stores/theme'
 import { useAuthStore } from '@/stores/auth'
 
 import AppMenus from './components/app-menus.vue'
 import BreadCrumb from '../components/bread-crumb.vue'
 
 const { appMenusTree } = storeToRefs(useAuthStore())
-const { layout } = storeToRefs(useLayoutStore())
+const { layout } = storeToRefs(useThemeStore())
 
 defineOptions({
   name: 'vk-layout-menus__header'

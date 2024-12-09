@@ -27,7 +27,7 @@ export const useThemeStore = defineStore('vk-theme', {
     }
   },
   actions: {
-    storeLayout() {
+    storeTheme() {
       storage.set(THEME_KEY, {
         primary: this.primary,
         isDark: this.isDark,
@@ -37,7 +37,7 @@ export const useThemeStore = defineStore('vk-theme', {
     // 切换布局
     switchLayout(layout: LATYOUT_TYPE) {
       this.layout = layout
-      this.storeLayout()
+      this.storeTheme()
     },
     // 切换dark/light模式
     switchDark(isDark: boolean) {
@@ -68,7 +68,7 @@ export const useThemeStore = defineStore('vk-theme', {
       }
       // 设置参数
       this.primary = val
-      this.storeLayout()
+      this.storeTheme()
     },
     // 初始化主题
     initTheme() {

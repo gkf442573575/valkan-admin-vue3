@@ -4,13 +4,17 @@
     <!--header-->
     <MenusHeader />
     <!-- 是否展示tab -->
-    <LayoutTab />
+    <div class="vk-toggle-tab w-10 h-10 mr-3 flex items-center justify-center" @click="visibleTab = !visibleTab">
+      <span
+        class="relative inline-block w-[26px] h-[26px] cursor-pointer rounded-full bg-error shadow-[0_0_10px_0_var(--el-color-error-light-5)]"
+        :class="[visibleTab ? 'open' : '']"
+      ></span>
+    </div>
     <!--refresh 只有tab隐藏的时候显示-->
     <LayoutHeaderIcon title="刷新页面">
       <Refresh />
     </LayoutHeaderIcon>
     <!-- 布局类型 -->
-    <LayoutType />
     <el-popover placement="bottom" title="布局样式" :width="290" trigger="click">
       <template #reference>
         <LayoutHeaderIcon :use-tooltip="false">
@@ -22,15 +26,41 @@
           <li
             v-for="item in LAYOUT_LIST"
             :key="item.type"
-            class="vk-layout-style w-1/2 p-[10px] float-left"
+            class="w-1/2 h-[90px] p-[10px] float-left relative"
             :class="[item.type]"
+            @click="() => themeStore.switchLayout(item.type)"
           >
-            <div class="vk-layout-style_item w-[100px] h-[70px]">
-              <div class="head"></div>
-              <div class="main">
-                <div v-for="child in item.main" :key="`${item.type}_${child}`" :class="child"></div>
+            <div
+              class="w-[100px] h-full cursor-pointer mx-auto p-2 rounded-[6px] border-2 shadow-[0_0_10px_var(--el-color-primary-light-7)] hover:shadow-[0_0_10px_var(--el-color-primary-light-5)]"
+              :class="[layout === item.type ? 'border-primary' : 'border-transparent']"
+            >
+              <div
+                class="head w-full h-[15px] mb-[5px] rounded"
+                :class="[item.type === 'menuhead' ? 'bg-primary' : 'bg-primary-light-2']"
+              ></div>
+              <div class="main h-[30px] flex">
+                <div
+                  v-for="child in item.main"
+                  :key="`${item.type}_${child}`"
+                  class="rounded h-full w-[15px] mr-[5px]"
+                  :class="[
+                    child,
+                    child === 'body'
+                      ? 'flex-1 bg-primary-light-7 border border-dashed border-primary-light-3 mr-0'
+                      : child === 'aside'
+                        ? 'bg-primary'
+                        : 'bg-primary-light-3'
+                  ]"
+                ></div>
               </div>
             </div>
+            <el-icon
+              class="absolute bottom-[12px] right-[18px]"
+              :class="[layout === item.type ? 'block' : 'hidden']"
+              color="var(--el-color-primary)"
+              size="20"
+              ><CircleCheckFilled
+            /></el-icon>
           </li>
         </ul>
       </template>
@@ -74,21 +104,19 @@ import { storeToRefs } from 'pinia'
 
 import { Refresh, FullScreen, OffScreen, Theme, LayoutFour } from '@icon-park/vue-next'
 
-import { Sunny, Moon } from '@element-plus/icons-vue'
+import { Sunny, Moon, CircleCheckFilled } from '@element-plus/icons-vue'
 
-import LayoutTab from './components/layout-tab.vue'
-import LayoutType from './components/layout-type.vue'
-import Avatar from './components/avatar.vue'
-
-import MenusHeader from './layout-menus/menus-header.vue'
-
-import LayoutHeaderIcon from './components/header-icon.vue'
-
-const APP_TITLE = import.meta.env.VITE_APP_TITLE
+// import LayoutTab from '../components/layout-tab.vue'
+import Avatar from '../components/avatar.vue'
+import MenusHeader from '../layout-menus/menus-header.vue'
+import LayoutHeaderIcon from '../components/header-icon.vue'
 
 import { THEME_COLOR_LIST, LAYOUT_LIST } from '@/constants/index'
 
 import { useThemeStore } from '@/stores/theme'
+
+const APP_TITLE = import.meta.env.VITE_APP_TITLE
+const visibleTab = defineModel<boolean>('visibleTab', { default: false })
 
 const { toggle, isFullscreen } = useFullscreen()
 const themeStore = useThemeStore()
@@ -120,6 +148,32 @@ defineOptions({
       }
       .el-color-picker__icon {
         color: transparent;
+      }
+    }
+  }
+}
+.vk-toggle-tab {
+  span {
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.2s cubic-bezier(0, -1.85, 0.27, 1.75);
+      width: 16px;
+      height: 4px;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+    &.open {
+      background-color: var(--el-color-success);
+      box-shadow: 0 0 10px 0 var(--el-color-success-light-5);
+      &::before {
+        height: 16px;
+        border-radius: 50%;
+        background-color: var(--el-color-success);
+        box-shadow: inset 0 0 0 2px #fff;
       }
     }
   }
