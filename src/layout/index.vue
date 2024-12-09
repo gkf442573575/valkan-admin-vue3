@@ -1,11 +1,22 @@
 <template>
-  <div class="vk-layout w-full h-full">
-    <LayoutHeader v-model:visible-tab="visibleTab"/>
-    <div :class="['vk-layout-main', layout]">
-      <LayoutMenus v-if="layout !== 'menuhead'" :layout="layout" />
-      <div :class="['vk-layout-body']">
-        <LayoutTabs />
-        <div class="vk-layout-views" ref="layoutViewRef">
+  <div class="vk-layout w-full h-full overflow-hidden">
+    <LayoutHeader v-model:visible-tab="visibleTab" />
+    <div class="vk-layout-main relative overflow-hidden">
+      <LayoutMenus
+        v-if="layout !== 'menuhead'"
+        :layout="layout"
+        :is-collapse="isCollapse"
+        @collapse="isCollapse = !isCollapse"
+      />
+      <div
+        :class="[
+          'vk-layout-body w-full h-full overflow-hidden',
+          layout,
+          isCollapse ? 'collapse' : ''
+        ]"
+      >
+        <LayoutTabs v-show="visibleTab" />
+        <div class="vk-layout-views p-[15px]" ref="layoutViewRef">
           <router-view></router-view>
           <!-- <router-view v-slot="{ Component, route }">
             <transition appear name="fade-transform" mode="out-in">

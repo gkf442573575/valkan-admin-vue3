@@ -21,45 +21,16 @@ $menus-sub-w_collapse: 65;
   transition: all 0.3s var(--el-transition-function-ease-in-out-bezier);
 }
 
+
 .vk-layout {
-  overflow: hidden;
-}
-
-.vk-layout-header {
-  height: #{$layout-header-h}px;
-  background-color: var(--el-bg-color);
-  border-bottom: var(--el-border);
-  padding: 0 15px;
-  .vk-app-title {
-    color: var(--el-color-primary);
+  & &-header {
+    height: #{$layout-header-h}px;
   }
-  .vk-layout-menus__header {
-    flex: 1;
-    padding: 0 15px;
-  }
-  & &__icons {
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 50%;
-    line-height: 40px;
-    margin-left: 5px;
-    &:hover {
-      background-color: var(--el-color-info-light-7);
-    }
-    .i-icon {
-      color: var(--el-text-color-regular);
-      font-size: 20px;
-      height: 40px;
-    }
+  & &-main {
+    height: calc(100% - #{$layout-header-h}px);
   }
 }
 
-.vk-layout-main {
-  height: calc(100% - #{$layout-header-h}px);
-  position: relative;
-}
 
 .vk-layout-menus {
   height: 100%;
@@ -182,8 +153,6 @@ $menus-sub-w_collapse: 65;
 }
 
 .vk-layout-body {
-  width: 100%;
-  height: 100%;
   @extend .layout-transition;
   overflow: hidden;
   &.visible-tabs {
@@ -203,19 +172,10 @@ $menus-sub-w_collapse: 65;
       padding-left: #{$menus-main-w + $menus-sub-w_collapse}px;
     }
   }
-  .vk-layout-views {
-    padding: 15px 20px;
-    height: 100%;
-    overflow: hidden;
-  }
 }
 
 /* tabs */
 .vk-layout-tabs {
-  width: 100%;
-  overflow: hidden;
-  background-color: var(--el-bg-color);
-  border-bottom: var(--el-border);
   .el-tabs {
     .el-tabs__header {
       box-sizing: border-box;

@@ -1,5 +1,5 @@
 <template>
-  <component :is="menusType"></component>
+  <component :is="menusType" :is-collapse="isCollapse" @collapse="emits('collapse')"></component>
 </template>
 
 <script setup lang="ts">
@@ -12,8 +12,16 @@ const props = defineProps({
   layout: {
     type: String,
     default: 'default'
+  },
+  isCollapse: {
+    type: Boolean,
+    default: false
   }
 })
+
+const emits = defineEmits<{
+  (e: 'collapse'): void
+}>()
 
 const menusType = computed(() => `vk-layout-menus__${props.layout}`)
 

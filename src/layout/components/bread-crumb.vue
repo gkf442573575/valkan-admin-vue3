@@ -30,7 +30,6 @@ const breadList = ref<BreadItem[]>([])
 const createBreadList = (matchArr: RouteLocationMatched[]) => {
   let matchList: RouteLocationMatched[] = []
   matchList = matchList.concat(matchArr)
-  // console.log('matchList >>>', matchArr)
   matchList.splice(0, 1)
   const newBreadList = []
   for (let i = 0; i < matchList.length; i++) {

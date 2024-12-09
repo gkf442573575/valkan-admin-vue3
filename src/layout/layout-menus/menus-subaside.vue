@@ -15,15 +15,19 @@ import type { MenusTree } from '@/interfaces'
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { useLayoutStore } from '@/stores/layout'
 import { useAuthStore } from '@/stores/auth'
 
 import mitt from '@/utils/mitt-bus'
 
 import AppMenus from './components/app-menus.vue'
 
-const layoutStore = useLayoutStore()
-const { isCollapse } = storeToRefs(layoutStore)
+defineProps<{
+  isCollapse: boolean
+}>()
+
+const emits = defineEmits<{
+  (e: 'collapse'): void
+}>()
 
 const { appMenusTree } = storeToRefs(useAuthStore())
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="vk-layout-menus__header">
+  <div class="flex-1 px-4">
     <AppMenus :menus-tree="appMenusTree" mode="horizontal" v-if="layout === 'menuhead'" />
     <BreadCrumb v-else />
   </div>

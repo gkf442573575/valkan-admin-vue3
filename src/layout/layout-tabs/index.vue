@@ -1,5 +1,5 @@
 <template>
-  <div class="vk-layout-tabs">
+  <div class="vk-layout-tabs w-full overflow-hidden bg-el border-b border-el">
     <el-tabs v-model="tabsMenuValue" type="card" @tab-change="tabChange" @tab-remove="tabRemove">
       <el-tab-pane
         v-for="(item, index) in tabList"

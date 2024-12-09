@@ -1,5 +1,5 @@
 <template>
-  <div class="vk-layout-header flex items-center">
+  <div class="vk-layout-header flex items-center bg-el border-el border-b px-4">
     <div class="font-semibold text-xl text-primary pr-4">{{ APP_TITLE }}</div>
     <!--header-->
     <MenusHeader />
