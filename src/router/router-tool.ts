@@ -229,7 +229,8 @@ export const createAppRoutes = (menusTree: MenusTree[], router: Router) => {
         icon: item.icon,
         isMain: item.isMain,
         isSub: item.isSub,
-        dynamic: true
+        dynamic: true,
+        keepAlive: !!item.keepAlive
       }
       if (children.length) {
         router.addRoute(parentName, {

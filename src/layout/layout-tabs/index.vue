@@ -53,7 +53,12 @@
                 >
                   关闭其他
                 </el-dropdown-item>
-                <el-dropdown-item :icon="Clear" @click="tabsStore.removeTab(item.path, router, 'all')"> 关闭所有 </el-dropdown-item>
+                <el-dropdown-item
+                  :icon="Clear"
+                  @click="tabsStore.removeTab(item.path, router, 'all')"
+                >
+                  关闭所有
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -68,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, inject, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -82,8 +87,8 @@ const router = useRouter()
 const tabsStore = useTabsStore()
 
 const { tabList, activeTab } = storeToRefs(tabsStore)
-// TODO:刷新
-const refresh = () => {}
+
+const refresh = inject('refresh') as () => void
 
 // 观察路径变化
 watch(

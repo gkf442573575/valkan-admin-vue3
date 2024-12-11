@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useRoute, type Router } from 'vue-router'
 
 import { useAuthStore } from './auth'
+import { useKeepAliveStore } from './keep-alive'
 
 interface TabItem {
   title: string
@@ -22,7 +23,9 @@ export const useTabsStore = defineStore('vk-tabs', {
     }
   },
   actions: {
+    // 添加tabs
     addTab(tab: TabItem) {
+      const keepAliveStore = useKeepAliveStore()
       if (!this.tabList.length) {
         const authStore = useAuthStore()
         const firstMenu = authStore.appMenusTree[0]
@@ -32,12 +35,18 @@ export const useTabsStore = defineStore('vk-tabs', {
           close: false,
           icon: firstMenu.icon || 'home'
         })
-
+        if(firstMenu.keepAlive) {
+          keepAliveStore.addKeepAliveName(tab.path)
+        }
       }
       const index = this.tabList.findIndex((item) => item.path === tab.path)
       if (index >= 0) return
+      if(tab.keepAlive) {
+        keepAliveStore.addKeepAliveName(tab.path)
+      }
       this.tabList.push(tab)
     },
+    // 移除tabs
     removeTab(path: string, router: Router, type: RemoveType = 'current') {
       const index = this.tabList.findIndex((item) => item.path === path)
       if (index < 0) return
@@ -62,6 +71,10 @@ export const useTabsStore = defineStore('vk-tabs', {
         this.activeTab = this.tabList[0].path
         router.replace(this.activeTab)
       }
+      // 移除后
+      const keepAliveStore = useKeepAliveStore()
+      const keepLiveNames = this.tabList.filter(item => item.keepAlive).map(item => item.path)
+      keepAliveStore.setKeepAliveName(keepLiveNames)
     }
   }
 })

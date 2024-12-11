@@ -23,7 +23,6 @@
         </div>
         <div
           class="vk-layout-views overflow-hidden"
-          ref="layoutViewRef"
           :class="[
             visibleTab ? (layout === 'menuhead' ? 'h-full' : 'h-[calc(100%_-_41px)]') : 'h-full'
           ]"
@@ -44,8 +43,9 @@
 </template>
 
 <script setup lang="ts">
-import { provide, ref } from 'vue'
+import { nextTick, provide, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 
 import LayoutHeader from './layout-header/index.vue'
 import LayoutMenus from './layout-menus/index.vue'
@@ -54,12 +54,15 @@ import LayoutTabs from './layout-tabs/index.vue'
 import BreadCrumb from './components/bread-crumb.vue'
 
 import { useThemeStore } from '@/stores/theme'
+import { useKeepAliveStore } from '@/stores/keep-alive'
 
-const layoutViewRef = ref<Element>()
 const themeStore = useThemeStore()
+const keepAliveStore = useKeepAliveStore()
 
 const { layout } = storeToRefs(themeStore)
+const { keepAliveName } = storeToRefs(keepAliveStore)
 
+const route = useRoute()
 // 是否 折叠菜单
 const isFold = ref(false)
 // 是否显示标签页
@@ -68,13 +71,21 @@ const hasSubAside = ref(false)
 
 // 刷新页面
 const isShowRoute = ref(true)
-
-const keepAliveName = ref([])
-
 const subasideChange = (val: boolean) => {
   hasSubAside.value = val
 }
-const refresh = (val: boolean) => (isShowRoute.value = val)
+// 刷新页面
+const refresh = () => {
+  console.log('refresh')
+  const keepAlive = !!route.meta.keepAlive
+  keepAlive && keepAliveStore.removeKeepAliveName(route.fullPath)
+  isShowRoute.value = false
+  setTimeout(async () => {
+    await nextTick()
+    keepAlive && keepAliveStore.addKeepAliveName(route.fullPath)
+    isShowRoute.value = true
+  }, 0)
+}
 provide('refresh', refresh)
 
 defineOptions({

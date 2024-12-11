@@ -40,7 +40,8 @@ const userMenus: menuData = {
       path: '/system/account',
       title: '账号管理',
       parentId: '3',
-      sort: 0
+      sort: 0,
+      keepAlive: true
     }
   ],
   user: [...normalMenus]
