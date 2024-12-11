@@ -11,7 +11,7 @@
       ></span>
     </div>
     <!--refresh 只有tab隐藏的时候显示-->
-    <LayoutHeaderIcon title="刷新页面">
+    <LayoutHeaderIcon title="刷新页面" v-if="!visibleTab">
       <Refresh />
     </LayoutHeaderIcon>
     <!-- 布局类型 -->

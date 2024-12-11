@@ -1,5 +1,5 @@
 <template>
-  <div class="vk-app-menus no-scrollbar">
+  <div class="vk-app-menus">
     <el-menu
       class="vk-menus"
       popper-class="vk-menus-popper"

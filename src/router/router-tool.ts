@@ -36,7 +36,7 @@ const NEW_MENUS: NewMenuItem[] = [
     title: '编辑器',
     children: [
       { path: '/editor/json', title: 'JSON编辑器' },
-      { path: '/editor/sql', title: 'SQL编辑器' }
+      { path: '/editor/sql', title: 'SQL编辑器' },
     ]
   },
   {
