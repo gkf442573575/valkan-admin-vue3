@@ -26,22 +26,13 @@ export const useTabsStore = defineStore('vk-tabs', {
       if (!this.tabList.length) {
         const authStore = useAuthStore()
         const firstMenu = authStore.appMenusTree[0]
-        console.log('firstMenu >>>', firstMenu)
         this.tabList.push({
           title: firstMenu.title || '首页',
           path: firstMenu.path,
           close: false,
           icon: firstMenu.icon || 'home'
         })
-        for (let i = 0; i < 20; i++) {
-          // const element = array[i];
-          this.tabList.push({
-            title: '菜单' + i,
-            path: '/system/account?id=' + i,
-            close: true,
-            icon: 'application-menu'
-          })
-        }
+
       }
       const index = this.tabList.findIndex((item) => item.path === tab.path)
       if (index >= 0) return
@@ -52,7 +43,7 @@ export const useTabsStore = defineStore('vk-tabs', {
       if (index < 0) return
       if (type === 'current') {
         // 移除当前
-        if(this.activeTab === path && index > 1) {
+        if(this.activeTab === path && index >= 1) {
           this.activeTab = this.tabList[index - 1].path
           router.replace(this.activeTab)
         }
