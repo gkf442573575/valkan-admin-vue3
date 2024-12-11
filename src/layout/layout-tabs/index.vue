@@ -94,7 +94,6 @@ const refresh = inject('refresh') as () => void
 watch(
   () => route.fullPath,
   async (newVal, oldVal) => {
-    console.log('full path >>>', newVal)
     tabsStore.addTab({
       title: String(route.meta.title || '未命名'),
       path: newVal,

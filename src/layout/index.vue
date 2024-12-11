@@ -76,11 +76,10 @@ const subasideChange = (val: boolean) => {
 }
 // 刷新页面
 const refresh = () => {
-  console.log('refresh')
-  const keepAlive = !!route.meta.keepAlive
-  keepAlive && keepAliveStore.removeKeepAliveName(route.fullPath)
-  isShowRoute.value = false
   setTimeout(async () => {
+    const keepAlive = !!route.meta.keepAlive
+    keepAlive && keepAliveStore.removeKeepAliveName(route.fullPath)
+    isShowRoute.value = false
     await nextTick()
     keepAlive && keepAliveStore.addKeepAliveName(route.fullPath)
     isShowRoute.value = true
