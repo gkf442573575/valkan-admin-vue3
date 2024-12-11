@@ -1,6 +1,10 @@
 <template>
   <div class="vk-layout-tabs w-full overflow-hidden bg-el border-b border-el px-4">
-    <el-tabs class="" v-model="activeTab" @tab-change="tabChange" @tab-remove="tabRemove">
+    <el-tabs
+      v-model="activeTab"
+      @tab-change="(name) => router.push(String(name))"
+      @tab-remove="(name) => tabsStore.removeTab(String(name), router)"
+    >
       <el-tab-pane
         v-for="(item, index) in tabList"
         :key="item.path"
@@ -18,26 +22,38 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item :icon="Refresh" @click="refresh">刷新</el-dropdown-item>
-                <el-dropdown-item divided v-if="index !== 0" :icon="DArrowLeft">
+                <el-dropdown-item
+                  divided
+                  v-if="index !== 0"
+                  :icon="DArrowLeft"
+                  @click="tabsStore.removeTab(item.path, router, 'left')"
+                >
                   关闭左侧
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="index !== tabList.length - 1"
                   :divided="index === 0"
                   :icon="DArrowRight"
+                  @click="tabsStore.removeTab(item.path, router, 'right')"
                 >
                   关闭右侧
                 </el-dropdown-item>
-                <el-dropdown-item :icon="CircleClose" divided @click="tabRemove(item.path)">
+                <el-dropdown-item
+                  :icon="CircleClose"
+                  divided
+                  @click="tabsStore.removeTab(item.path, router)"
+                  v-if="item.close"
+                >
                   关闭当前
                 </el-dropdown-item>
-                <el-dropdown-item :icon="Remove">关闭其他</el-dropdown-item>
-                <el-dropdown-item>
-                  <span>
-                    <park-icon icon="clear"></park-icon>
-                    关闭所有
-                  </span>
+                <el-dropdown-item
+                  :icon="Remove"
+                  :divided="!item.close"
+                  @click="tabsStore.removeTab(item.path, router, 'other')"
+                >
+                  关闭其他
                 </el-dropdown-item>
+                <el-dropdown-item :icon="Clear" @click="tabsStore.removeTab(item.path, router, 'all')"> 关闭所有 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -52,44 +68,22 @@
 </template>
 
 <script lang="ts" setup>
-import type { TabPaneName } from 'element-plus'
-
 import { computed, nextTick, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
 import { Refresh, CircleClose, DArrowLeft, DArrowRight, Remove } from '@element-plus/icons-vue'
+import { Clear } from '@icon-park/vue-next'
 
 import { useTabsStore } from '@/stores/tabs'
-
 const route = useRoute()
 const router = useRouter()
 
 const tabsStore = useTabsStore()
 
-const activeTab = ref(route.fullPath)
-
-const { tabList } = storeToRefs(tabsStore)
+const { tabList, activeTab } = storeToRefs(tabsStore)
 // TODO:刷新
 const refresh = () => {}
-
-const tabChange = (name: TabPaneName) => {
-  router.push({
-    path: String(name),
-    replace: true
-  })
-}
-
-// 移除tab
-const tabRemove = (name: TabPaneName) => {
-  const path = String(name)
-  console.log('remove tab >>>', path)
-  tabsStore.removeTab(path)
-  if (activeTab.value === path) {
-    const index = tabList.value.findIndex((item) => item.path === path)
-    activeTab.value = tabList.value[index - 1].path
-  }
-}
 
 // 观察路径变化
 watch(
