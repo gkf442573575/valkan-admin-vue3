@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"
+    />
+    <title>Valkan Admin</title>
+
+    <!-- element-plus 样式导入 -->
+    <link rel="stylesheet" href="./libs/element-plus/index.css" />
+    <link rel="stylesheet" href="./libs/element-plus/css-vars.css" />
+    
+    <link rel="stylesheet" href="./assets/fira-code/index.css" />
+    <style>
+      body {
+        font-family: 'Fira Code', sans-serif;
+      }
+    </style>
+    <style>
+      .app-loader {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+        --w: 10ch;
+        font-weight: bold;
+        font-family: monospace;
+        font-size: 30px;
+        letter-spacing: var(--w);
+        width: var(--w);
+        overflow: hidden;
+        white-space: nowrap;
+        text-shadow:
+          calc(-1 * var(--w)) 0,
+          calc(-2 * var(--w)) 0,
+          calc(-3 * var(--w)) 0,
+          calc(-4 * var(--w)) 0,
+          calc(-5 * var(--w)) 0,
+          calc(-6 * var(--w)) 0,
+          calc(-7 * var(--w)) 0,
+          calc(-8 * var(--w)) 0,
+          calc(-9 * var(--w)) 0;
+        -webkit-animation: l16 2s infinite;
+                animation: l16 2s infinite;
+      }
+      .app-loader:before {
+        content: 'Loading...';
+      }
+      @-webkit-keyframes l16 {
+        20% {
+          text-shadow:
+            calc(-1 * var(--w)) 0,
+            calc(-2 * var(--w)) 0 red,
+            calc(-3 * var(--w)) 0,
+            calc(-4 * var(--w)) 0 #ffa516,
+            calc(-5 * var(--w)) 0 #63fff4,
+            calc(-6 * var(--w)) 0,
+            calc(-7 * var(--w)) 0,
+            calc(-8 * var(--w)) 0 green,
+            calc(-9 * var(--w)) 0;
+        }
+        40% {
+          text-shadow:
+            calc(-1 * var(--w)) 0,
+            calc(-2 * var(--w)) 0 red,
+            calc(-3 * var(--w)) 0 #e945e9,
+            calc(-4 * var(--w)) 0,
+            calc(-5 * var(--w)) 0 green,
+            calc(-6 * var(--w)) 0 orange,
+            calc(-7 * var(--w)) 0,
+            calc(-8 * var(--w)) 0 green,
+            calc(-9 * var(--w)) 0;
+        }
+        60% {
+          text-shadow:
+            calc(-1 * var(--w)) 0 lightblue,
+            calc(-2 * var(--w)) 0,
+            calc(-3 * var(--w)) 0 #e945e9,
+            calc(-4 * var(--w)) 0,
+            calc(-5 * var(--w)) 0 green,
+            calc(-6 * var(--w)) 0,
+            calc(-7 * var(--w)) 0 yellow,
+            calc(-8 * var(--w)) 0 #ffa516,
+            calc(-9 * var(--w)) 0 red;
+        }
+        80% {
+          text-shadow:
+            calc(-1 * var(--w)) 0 lightblue,
+            calc(-2 * var(--w)) 0 yellow,
+            calc(-3 * var(--w)) 0 #63fff4,
+            calc(-4 * var(--w)) 0 #ffa516,
+            calc(-5 * var(--w)) 0 red,
+            calc(-6 * var(--w)) 0,
+            calc(-7 * var(--w)) 0 grey,
+            calc(-8 * var(--w)) 0 #63fff4,
+            calc(-9 * var(--w)) 0;
+        }
+      }
+      @keyframes l16 {
+        20% {
+          text-shadow:
+            calc(-1 * var(--w)) 0,
+            calc(-2 * var(--w)) 0 red,
+            calc(-3 * var(--w)) 0,
+            calc(-4 * var(--w)) 0 #ffa516,
+            calc(-5 * var(--w)) 0 #63fff4,
+            calc(-6 * var(--w)) 0,
+            calc(-7 * var(--w)) 0,
+            calc(-8 * var(--w)) 0 green,
+            calc(-9 * var(--w)) 0;
+        }
+        40% {
+          text-shadow:
+            calc(-1 * var(--w)) 0,
+            calc(-2 * var(--w)) 0 red,
+            calc(-3 * var(--w)) 0 #e945e9,
+            calc(-4 * var(--w)) 0,
+            calc(-5 * var(--w)) 0 green,
+            calc(-6 * var(--w)) 0 orange,
+            calc(-7 * var(--w)) 0,
+            calc(-8 * var(--w)) 0 green,
+            calc(-9 * var(--w)) 0;
+        }
+        60% {
+          text-shadow:
+            calc(-1 * var(--w)) 0 lightblue,
+            calc(-2 * var(--w)) 0,
+            calc(-3 * var(--w)) 0 #e945e9,
+            calc(-4 * var(--w)) 0,
+            calc(-5 * var(--w)) 0 green,
+            calc(-6 * var(--w)) 0,
+            calc(-7 * var(--w)) 0 yellow,
+            calc(-8 * var(--w)) 0 #ffa516,
+            calc(-9 * var(--w)) 0 red;
+        }
+        80% {
+          text-shadow:
+            calc(-1 * var(--w)) 0 lightblue,
+            calc(-2 * var(--w)) 0 yellow,
+            calc(-3 * var(--w)) 0 #63fff4,
+            calc(-4 * var(--w)) 0 #ffa516,
+            calc(-5 * var(--w)) 0 red,
+            calc(-6 * var(--w)) 0,
+            calc(-7 * var(--w)) 0 grey,
+            calc(-8 * var(--w)) 0 #63fff4,
+            calc(-9 * var(--w)) 0;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="./sources/index-B6c_8Upz.js"></script>
+    <link rel="modulepreload" crossorigin href="./sources/vueVendor-BneCeEhk.js">
+    <link rel="modulepreload" crossorigin href="./sources/elementIcon-CHpp6-Zs.js">
+    <link rel="modulepreload" crossorigin href="./sources/elementPlus-CrHrgUQm.js">
+    <link rel="modulepreload" crossorigin href="./sources/vendor-B7SUsqRE.js">
+    <link rel="modulepreload" crossorigin href="./sources/iconPark-9f2sOg0t.js">
+    <link rel="stylesheet" crossorigin href="./sources/index-Czuac6j2.css">
+  </head>
+  <body>
+    <div id="app">
+      <div class="app-loader"></div>
+    </div>
+  </body>
+</html>
