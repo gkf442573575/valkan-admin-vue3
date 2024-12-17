@@ -1,12 +1,12 @@
 {
   "login": {
-    "btn": "Sign in",
+    "btn": "Log in",
     "loading_btn": "Logging in",
+    "userplaceholder": "Please enter username (admin/user)",
     "passplaceholder": "Please enter password(123456)",
     "question": "Login issue",
     "title": "Login",
-    "userplaceholder": "Please enter username (admin/user)",
-    "comback": "welcome back",
+    "comback": "Welcome Back",
     "fail": "Login failed",
     "welcom": {
       "1": "Good morning, {0} ⛅",
