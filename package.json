@@ -1,6 +1,6 @@
 {
   "name": "valkan-admin-vue3",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "description": "A lightweight Vue3 admin template based on vue-router, pinia, element-plus, tailwindcss, i18n and more.",
