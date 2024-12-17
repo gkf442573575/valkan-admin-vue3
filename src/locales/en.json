@@ -1,0 +1,53 @@
+{
+  "login": {
+    "btn": "Sign in",
+    "loading_btn": "Logging in",
+    "passplaceholder": "Please enter password(123456)",
+    "question": "Login issue",
+    "title": "Login",
+    "userplaceholder": "Please enter username (admin/user)",
+    "comback": "welcome back",
+    "fail": "Login failed",
+    "welcom": {
+      "1": "Good morning, {0} ⛅",
+      "2": "Good afternoon, {0} 🌞",
+      "3": "Good afternoon, {0} 🌞",
+      "4": "Good evening, {0} 🌛",
+      "5": "Good morning, {0} 🌛"
+    }
+  },
+  "layout": {
+    "header": {
+      "cancle_full": "Cancel full screen",
+      "full": "Full screen",
+      "refresh": "Refresh",
+      "theme": "Theme",
+      "layout_type": "Layout style"
+    },
+    "avatar": {
+      "changepwd": "Change Password",
+      "loginout": "Log out",
+      "user_center": "Personal Center"
+    }
+  },
+  "home": {
+    "title": "HOME"
+  },
+  "editor": {
+    "json": {
+      "title": "JSON"
+    },
+    "sql": {
+      "title": "SQL "
+    },
+    "title": "Editor"
+  },
+  "system": {
+    "account": {
+      "title": "ACCOUNT"
+    },
+    "title": "SYSTEM"
+  },
+  "hide": "hide",
+  "show": "display"
+}
