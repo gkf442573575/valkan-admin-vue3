@@ -23,6 +23,7 @@
     "element admin",
     "tailwindcss admin"
   ],
+  "homepage": "https://gkf442573575.github.io/valkan-admin-vue3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gkf442573575/valkan-admin-vue3.git"
